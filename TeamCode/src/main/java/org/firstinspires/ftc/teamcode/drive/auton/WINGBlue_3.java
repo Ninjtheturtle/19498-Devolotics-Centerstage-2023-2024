@@ -57,7 +57,7 @@ public class WINGBlue_3 extends OpMode {
 
     // Intake Servo Positions
     int intakeDown = 460;
-    int intakeUp = 220;
+    int intakeUp = 260;
 
     // Locking Servo Positions
     int lockFU = 0;
@@ -119,6 +119,9 @@ public class WINGBlue_3 extends OpMode {
     Trajectory traj_left4 = null;
     Trajectory traj_left5 = null;
     Trajectory traj_left6 = null;
+    Trajectory traj_left7 = null;
+    Trajectory traj_left8 = null;
+
     Trajectory traj_middle1 = null;
     Trajectory traj_middle201 = null;
     Trajectory traj_middle2 = null;
@@ -126,6 +129,8 @@ public class WINGBlue_3 extends OpMode {
     Trajectory traj_middle4 = null;
     Trajectory traj_middle5 = null;
     Trajectory traj_middle6 = null;
+    Trajectory traj_middle7 = null;
+    Trajectory traj_middle8 = null;
 
     Trajectory traj_right1 = null;
     Trajectory traj_right201 = null;
@@ -134,6 +139,10 @@ public class WINGBlue_3 extends OpMode {
     Trajectory traj_right4 = null;
     Trajectory traj_right5 = null;
     Trajectory traj_right6 = null;
+    Trajectory traj_right7 = null;
+    Trajectory traj_right8 = null;
+
+    Trajectory adjust = null;
 
     // Miscellaneous
     private ElapsedTime runtime = new ElapsedTime();
@@ -326,10 +335,10 @@ public class WINGBlue_3 extends OpMode {
 
         traj_left3 = drive.trajectoryBuilder(traj_left201.end(), true)
                 .lineToConstantHeading(new Vector2d(-50, 55))
-                .splineToConstantHeading(new Vector2d(-38, betweenTrussY-3), Math.toRadians(0))
-                .lineToConstantHeading(new Vector2d(30, betweenTrussY-3))
-                .splineToConstantHeading(new Vector2d(midX(30,46), midY(betweenTrussY-3,37)), lineDirection(30,betweenTrussY-3,46,37))
-                .lineToConstantHeading(new Vector2d(46, 37))
+                .splineToConstantHeading(new Vector2d(-38, betweenTrussY-1), Math.toRadians(0))
+                .lineToConstantHeading(new Vector2d(30, betweenTrussY-1))
+                .splineToConstantHeading(new Vector2d(midX(30,46), midY(betweenTrussY-1,37)), lineDirection(30,betweenTrussY-1,46,37))
+                .lineToConstantHeading(new Vector2d(48, 37))
                 .build(); // backdrop
 
         traj_left4 = drive.trajectoryBuilder(traj_left3.end())
@@ -345,7 +354,7 @@ public class WINGBlue_3 extends OpMode {
                 .splineToConstantHeading(new Vector2d(-38, betweenTrussY-2), Math.toRadians(0))
                 .lineToConstantHeading(new Vector2d(30, betweenTrussY-2))
                 .splineToConstantHeading(new Vector2d(midX(30,46), midY(betweenTrussY-2,37)), lineDirection(30,betweenTrussY-2,46,37))
-                .lineToConstantHeading(new Vector2d(46, 37))
+                .lineToConstantHeading(new Vector2d(48, 37))
                 .build(); // backdrop
 
         traj_left6 = drive.trajectoryBuilder(traj_left5.end())
@@ -359,7 +368,7 @@ public class WINGBlue_3 extends OpMode {
                 .build(); // spike mark
 
         traj_middle2 = drive.trajectoryBuilder(traj_middle1.end())
-                .lineToLinearHeading(new Pose2d(-58, 36, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(-58, 37, Math.toRadians(180)))
                 .build(); // move away from spike
 
         traj_middle201 = drive.trajectoryBuilder(traj_middle2.end())
@@ -368,31 +377,31 @@ public class WINGBlue_3 extends OpMode {
 
         traj_middle3 = drive.trajectoryBuilder(traj_left201.end(), true)
                 .lineToConstantHeading(new Vector2d(-50, 55))
-                .splineToConstantHeading(new Vector2d(-38, betweenTrussY-2), Math.toRadians(0))
-                .lineToConstantHeading(new Vector2d(30, betweenTrussY-2))
-                .splineToConstantHeading(new Vector2d(midX(30,46), midY(betweenTrussY-2,33)), lineDirection(30,betweenTrussY-2,46,33))
-                .lineToConstantHeading(new Vector2d(46, 33))
-                .build(); // stack
+                .splineToConstantHeading(new Vector2d(-38, betweenTrussY-3), Math.toRadians(0))
+                .lineToConstantHeading(new Vector2d(30, betweenTrussY-3))
+                .splineToConstantHeading(new Vector2d(midX(30,46), midY(betweenTrussY-3,37)), lineDirection(30,betweenTrussY-3,46,37))
+                .lineToConstantHeading(new Vector2d(48, 37))
+                .build(); // backdrop
 
         traj_middle4 = drive.trajectoryBuilder(traj_left3.end())
-                .lineToConstantHeading(new Vector2d(midX(46,30), midY(33,betweenTrussY+2)))
-                .splineToConstantHeading(new Vector2d(30, betweenTrussY+2), Math.toRadians(180))
-                .lineToConstantHeading(new Vector2d(-38, betweenTrussY+2))
-                .splineToConstantHeading(new Vector2d(midX(-38, -58), midY(betweenTrussY+2, 36)), lineDirection(-38, betweenTrussY+2, -58, 36))
-                .lineToConstantHeading(new Vector2d(-58, 36))
-                .build(); // go backdrop
+                .lineToConstantHeading(new Vector2d(midX(46,30), midY(33,betweenTrussY-1)))
+                .splineToConstantHeading(new Vector2d(30, betweenTrussY-1), Math.toRadians(180))
+                .lineToConstantHeading(new Vector2d(-38, betweenTrussY-1))
+                .splineToConstantHeading(new Vector2d(midX(-38, -58), midY(betweenTrussY-1, 37)), lineDirection(-38, betweenTrussY-1, -58, 37))
+                .lineToConstantHeading(new Vector2d(-58, 37))
+                .build(); // stack
 
         traj_middle5 = drive.trajectoryBuilder(traj_left4.end(), true)
                 .lineToConstantHeading(new Vector2d(-50, 55))
                 .splineToConstantHeading(new Vector2d(-38, betweenTrussY-2), Math.toRadians(0))
                 .lineToConstantHeading(new Vector2d(30, betweenTrussY-2))
-                .splineToConstantHeading(new Vector2d(midX(30,46), midY(betweenTrussY-2,33)), lineDirection(30,betweenTrussY-2,46,33))
-                .lineToConstantHeading(new Vector2d(46, 33))
+                .splineToConstantHeading(new Vector2d(midX(30,46), midY(betweenTrussY-2,37)), lineDirection(30,betweenTrussY-2,46,37))
+                .lineToConstantHeading(new Vector2d(48, 37))
                 .build(); // backdrop
 
         traj_middle6 = drive.trajectoryBuilder(traj_left5.end())
-                .splineToConstantHeading(new Vector2d(60, betweenTrussY-2), Math.toRadians(350))
-                .build();
+                .splineToConstantHeading(new Vector2d(56, betweenTrussY+6), Math.toRadians(330))
+                .build(); //park
 
         // Prop on the right
         traj_right1 = drive.trajectoryBuilder(START_POSE)
@@ -400,34 +409,40 @@ public class WINGBlue_3 extends OpMode {
                 .build(); // spike mark
 
         traj_right2 = drive.trajectoryBuilder(traj_right1.end())
-                .lineToConstantHeading(new Vector2d(-35, 35))
-                .splineToLinearHeading(new Pose2d(-58, 36, Math.toRadians(180)), Math.toRadians(270))
+                .lineToConstantHeading(new Vector2d(-35, 40))
+                .splineToLinearHeading(new Pose2d(-58, 37, Math.toRadians(180)), Math.toRadians(180))
                 .build(); // move away from spike
 
         traj_right201 = drive.trajectoryBuilder(traj_right2.end())
                 .forward(0.005)
                 .build(); // move away from spike
 
-        traj_right3 = drive.trajectoryBuilder(traj_right201.end(), true)
-                .splineToConstantHeading(new Vector2d(-34, 56), Math.toRadians(0))
-                .lineToConstantHeading(new Vector2d(20, 56))
-                .splineToConstantHeading(new Vector2d(44, 33), Math.toRadians(0))
-                .build(); // align backdrop
-
-        traj_right4 = drive.trajectoryBuilder(traj_right3.end())
-                .splineToConstantHeading(new Vector2d(30, 58), Math.toRadians(180))
-                .lineToConstantHeading(new Vector2d(-34, 58))
-                .splineToConstantHeading(new Vector2d(-58, 36), Math.toRadians(180))
-                .build(); // go backdrop
-
-        traj_right5 = drive.trajectoryBuilder(traj_right4.end(), true)
-                .splineToConstantHeading(new Vector2d(-50, 58), Math.toRadians(0))
-                .lineToConstantHeading(new Vector2d(30, 58))
-                .splineToConstantHeading(new Vector2d(46, 33), Math.toRadians(0))
+        traj_right3 = drive.trajectoryBuilder(traj_left201.end(), true)
+                .lineToConstantHeading(new Vector2d(-50, 55))
+                .splineToConstantHeading(new Vector2d(-38, betweenTrussY-3), Math.toRadians(0))
+                .lineToConstantHeading(new Vector2d(30, betweenTrussY-3))
+                .splineToConstantHeading(new Vector2d(midX(30,46), midY(betweenTrussY-3,37)), lineDirection(30,betweenTrussY-3,46,37))
+                .lineToConstantHeading(new Vector2d(48, 37))
                 .build(); // backdrop
 
-        traj_right6 = drive.trajectoryBuilder(traj_right5.end())
-                .splineToConstantHeading(new Vector2d(60, 58), Math.toRadians(330))
+        traj_right4 = drive.trajectoryBuilder(traj_left3.end())
+                .lineToConstantHeading(new Vector2d(midX(46,30), midY(33,betweenTrussY-1)))
+                .splineToConstantHeading(new Vector2d(30, betweenTrussY-1), Math.toRadians(180))
+                .lineToConstantHeading(new Vector2d(-38, betweenTrussY-1))
+                .splineToConstantHeading(new Vector2d(midX(-38, -58), midY(betweenTrussY-1, 37)), lineDirection(-38, betweenTrussY-1, -58, 37))
+                .lineToConstantHeading(new Vector2d(-58, 37))
+                .build(); // stack
+
+        traj_right5 = drive.trajectoryBuilder(traj_left4.end(), true)
+                .lineToConstantHeading(new Vector2d(-50, 55))
+                .splineToConstantHeading(new Vector2d(-38, betweenTrussY-2), Math.toRadians(0))
+                .lineToConstantHeading(new Vector2d(30, betweenTrussY-2))
+                .splineToConstantHeading(new Vector2d(midX(30,46), midY(betweenTrussY-2,37)), lineDirection(30,betweenTrussY-2,46,37))
+                .lineToConstantHeading(new Vector2d(48, 37))
+                .build(); // backdrop
+
+        traj_right6 = drive.trajectoryBuilder(traj_left5.end())
+                .splineToConstantHeading(new Vector2d(56, betweenTrussY+6), Math.toRadians(330))
                 .build(); //park
 
         // Build Autonomous Program
@@ -643,7 +658,7 @@ public class WINGBlue_3 extends OpMode {
                             timeout.reset();
                         }
                         else {
-                            if (timeout.milliseconds() > 1000) {
+                            if (timeout.milliseconds() > 100) {
                                 CHANGE_LINE = true;
                             }
                         }
@@ -651,6 +666,36 @@ public class WINGBlue_3 extends OpMode {
                         CHANGE_LINE = true;
                     }
                     break;
+                case 11:
+                    //put deposit down
+                    setMotorTarget(VLIFT, 600); //lift up
+                    setServoPos(LOCKFRONT, lockFD); //lock down
+                    setServoPos(LOCKBACK, lockBD);
+                    setServoPos(PIVOT, pivotHome); //q turn back down
+                    waitTime(TurnQTime);
+                    setServoPos(VPITCH, vPitchIntake); //turn into robot
+                    waitTime(DownDepositTime);
+                    setMotorTarget(VLIFT, -10); //lift down
+                case 12:
+                    switch (arg1) {
+                        case 1: //place first row
+                            //deposit up
+                            setMotorTarget(VLIFT, targetMed - 70); //slides up
+                            waitTime(UpDepositTime);
+                            setServoPos(VPITCH, vPitchDeposit); //deposit out
+                            waitTime(TurnQTime);
+                            setServoPos(PIVOT, pivotScore); //Q turn
+                            setMotorTarget(VLIFT, 300); //deposit down
+                            break;
+                        case 2: //random white pixel drop height
+                            //deposit up
+                            setMotorTarget(VLIFT, targetMed - 70); //slides up
+                            waitTime(UpDepositTime);
+                            setServoPos(VPITCH, vPitchDeposit); //deposit out
+                            waitTime(TurnQTime);
+                            setServoPos(PIVOT, pivotScore); //Q turn
+                            break;
+                    }
             }
 
             prevLine = line;
@@ -658,6 +703,7 @@ public class WINGBlue_3 extends OpMode {
                 line += 1;
             }
         }
+
 
         drive.update();
 
@@ -708,6 +754,8 @@ public class WINGBlue_3 extends OpMode {
     public void setMotorPower(int power) {PROGRAM.add(new int[] {69, power, 0, 0});}
 
     public void checkIntaked() { PROGRAM.add(new int[] {8, 0, 0, 0}); }
+    public void depositUp(int rowNum) {PROGRAM.add(new int[] {11, rowNum, 0, 0});}
+    public void depositDown() {PROGRAM.add(new int[] {12, 0, 0, 0});}
 
     public void buildProgram() {
         setServoPos(INTAKE, intakeDown);
@@ -718,130 +766,140 @@ public class WINGBlue_3 extends OpMode {
 
         switch (PROPLOCATION_N) {
             case 0:
-                followTraj(1);
-                waitTrajDone();
+                followTraj(1); //ppp
+                /*wait*/ waitTrajDone();
                 setServoPos(INTAKE, intakeUp);
 
-                followTraj(2);
-                waitTime(600);
+                followTraj(2); //stack+1
+                /*wait*/ waitTime(150);
                 setMotorPower(1);
-                waitTrajDone();
-                waitTime(80);
+                /*wait*/ waitTrajDone();
+                /*wait*/ waitTime(80);
                 checkIntaked();
                 setMotorPower(-1);
 
-                followTraj(3);
-                waitTrajDone();
+                followTraj(3); //to backdrop
+                /*wait*/ waitTime(500);
                 setMotorPower(0);
-
-                followTraj(4);
-                setMotorTarget(VLIFT, targetMed - 70);
-                waitTime(500);
-                setServoPos(VPITCH, vPitchDeposit);
-                waitTime(500);
-                setServoPos(PIVOT, pivotScore);
-                setMotorTarget(VLIFT, 300);
-
-                followTraj(5);
-                waitTrajDone();
+                /*wait*/ waitTime(1300);
+                depositUp(1);
+                /*wait*/ waitTrajDone();
                 setServoPos(LOCKFRONT, lockFU);
                 setServoPos(LOCKBACK, lockBU);
 
-                followTraj(6);
-                setMotorTarget(VLIFT, 600);
-                waitTime(200);
-                setServoPos(LOCKFRONT, lockFD);
-                setServoPos(LOCKBACK, lockBD);
-                setServoPos(PIVOT, pivotHome);
-                waitTime(400);
-                setServoPos(VPITCH, vPitchIntake);
-                waitTime(800);
-                setMotorTarget(VLIFT, -10);
+                followTraj(4); //to stack+2
+                /*wait*/ waitTime(200);
+                depositDown();
+                /*wait*/ waitTime(1500);
+                setMotorPower(1);
+                /*wait*/ waitTrajDone();
+                /*wait*/ waitTime(80);
+                checkIntaked();
+                setMotorPower(-1);
+
+                followTraj(5); //to backdrop
+                /*wait*/ waitTime(500);
+                setMotorPower(0);
+                /*wait*/ waitTime(1500);
+                depositUp(2);
+                /*wait*/ waitTrajDone();
+                setServoPos(LOCKFRONT, lockFU);
+                setServoPos(LOCKBACK, lockBU);
+
+                followTraj(6); //park
+                /*wait*/ waitTime(200);
+                depositDown();
                 break;
             case 1:
-                followTraj(11);
-                waitTrajDone();
+                followTraj(11); //ppp
+                /*wait*/ waitTrajDone();
                 setServoPos(INTAKE, intakeUp);
 
-                followTraj(12);
-                waitTime(600);
+                followTraj(12); //stack+1
+                /*wait*/ waitTime(600);
                 setMotorPower(1);
-                waitTrajDone();
-                waitTime(80);
+                /*wait*/ waitTrajDone();
+                /*wait*/ waitTime(80);
                 checkIntaked();
                 setMotorPower(-1);
 
-                followTraj(13);
-                waitTrajDone();
+                followTraj(13); //to backdrop
+                /*wait*/ waitTime(500);
                 setMotorPower(0);
-
-                followTraj(14);
-                setMotorTarget(VLIFT, targetMed - 70);
-                waitTime(500);
-                setServoPos(VPITCH, vPitchDeposit);
-                waitTime(500);
-                setServoPos(PIVOT, pivotScore);
-                setMotorTarget(VLIFT, 300);
-
-                followTraj(15);
-                waitTrajDone();
+                /*wait*/ waitTime(1300);
+                depositUp(1);
+                /*wait*/ waitTrajDone();
                 setServoPos(LOCKFRONT, lockFU);
                 setServoPos(LOCKBACK, lockBU);
 
-                followTraj(16);
-                setMotorTarget(VLIFT, 600);
-                waitTime(200);
-                setServoPos(LOCKFRONT, lockFD);
-                setServoPos(LOCKBACK, lockBD);
-                setServoPos(PIVOT, pivotHome);
-                waitTime(400);
-                setServoPos(VPITCH, vPitchIntake);
-                waitTime(800);
-                setMotorTarget(VLIFT, -10);
+                followTraj(14); //to stack+2
+                /*wait*/ waitTime(200);
+                depositDown();
+                /*wait*/ waitTime(1500);
+                setMotorPower(1);
+                /*wait*/ waitTrajDone();
+                /*wait*/ waitTime(80);
+                checkIntaked();
+                setMotorPower(-1);
+
+                followTraj(15); //to backdrop
+                /*wait*/ waitTime(500);
+                setMotorPower(0);
+                /*wait*/ waitTime(1500);
+                depositUp(2);
+                /*wait*/ waitTrajDone();
+                setServoPos(LOCKFRONT, lockFU);
+                setServoPos(LOCKBACK, lockBU);
+
+                followTraj(16); //park
+                /*wait*/ waitTime(200);
+                depositDown();
                 break;
             case 2:
-                followTraj(21);
-                waitTrajDone();
+                followTraj(21); //ppp
+                /*wait*/ waitTrajDone();
                 setServoPos(INTAKE, intakeUp);
 
-                followTraj(22);
-                waitTime(600);
+                followTraj(22); //stack+1
+                /*wait*/ waitTime(150);
                 setMotorPower(1);
-                waitTrajDone();
-                waitTime(80);
+                /*wait*/ waitTrajDone();
+                /*wait*/ waitTime(80);
                 checkIntaked();
                 setMotorPower(-1);
 
-                followTraj(23);
-                waitTrajDone();
+                followTraj(23); //to backdrop
+                /*wait*/ waitTime(500);
                 setMotorPower(0);
-
-                followTraj(24);
-                setMotorTarget(VLIFT, targetMed - 70);
-                waitTime(500);
-                setServoPos(VPITCH, vPitchDeposit);
-                waitTime(500);
-                setServoPos(PIVOT, pivotScore);
-                setMotorTarget(VLIFT, 300);
-
-                followTraj(25);
-                waitTrajDone();
+                /*wait*/ waitTime(1300);
+                depositUp(1);
+                /*wait*/ waitTrajDone();
                 setServoPos(LOCKFRONT, lockFU);
                 setServoPos(LOCKBACK, lockBU);
 
-                followTraj(26);
-                setMotorTarget(VLIFT, 600);
-                waitTime(200);
-                setServoPos(LOCKFRONT, lockFD);
-                setServoPos(LOCKBACK, lockBD);
-                setServoPos(PIVOT, pivotHome);
-                waitTime(400);
-                setServoPos(VPITCH, vPitchIntake);
-                waitTime(800);
-                setMotorTarget(VLIFT, -10);
+                followTraj(24); //to stack+2
+                /*wait*/ waitTime(200);
+                depositDown();
+                /*wait*/ waitTime(1500);
+                setMotorPower(1);
+                /*wait*/ waitTrajDone();
+                /*wait*/ waitTime(80);
+                checkIntaked();
+                setMotorPower(-1);
+
+                followTraj(25); //to backdrop
+                /*wait*/ waitTime(500);
+                setMotorPower(0);
+                /*wait*/ waitTime(1500);
+                depositUp(2);
+                /*wait*/ waitTrajDone();
+                setServoPos(LOCKFRONT, lockFU);
+                setServoPos(LOCKBACK, lockBU);
+
+                followTraj(26); //park
+                /*wait*/ waitTime(200);
+                depositDown();
                 break;
         }
-
-
     }
 }
