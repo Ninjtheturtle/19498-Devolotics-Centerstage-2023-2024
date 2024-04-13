@@ -7,6 +7,15 @@ import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 public class MeepMeepTesting {
+    public static double lineDirection(double startPointX, double startPointY, double endPointX, double endPointY){
+        return Math.atan2(endPointY - startPointY, endPointX - startPointX);
+    }
+    public static double midX(double startPointX, double endPointX){
+        return (endPointX + startPointX) / 2;
+    }
+    public static double midY(double startPointY, double endPointY){
+        return (endPointY + startPointY) / 2;
+    }
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(800);
 
@@ -17,43 +26,25 @@ public class MeepMeepTesting {
                 .setConstraints(50, 50, Math.toRadians(180), Math.toRadians(180), 15.55)
                 .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(START_POSE)
 
-                        //ppp
-                        .splineTo(new Vector2d(-34, 40), Math.toRadians(320))
-                .lineToLinearHeading(new Pose2d(-58, 36, Math.toRadians(180)))
-//                        //white stack
-//                        .lineToLinearHeading(new Pose2d(-58, -36, Math.toRadians(180)))
-//                        //slowly forward
-//                        .forward(0.005)
-//
-//                        //to backdrop //true
-//                        .turn(Math.toRadians(180))
-//                        .splineToConstantHeading(new Vector2d(-34, -56), Math.toRadians(0))
-//                        .lineToConstantHeading(new Vector2d(30, -56))
-//                        .splineToConstantHeading(new Vector2d(46, -33), Math.toRadians(0))
-//
-//                        .waitSeconds(2)
-//
-//                        //to white stack
-//                        .turn(Math.toRadians(180))
-//                        .splineToConstantHeading(new Vector2d(30, -56), Math.toRadians(180))
-//                        .lineToConstantHeading(new Vector2d(-34, -56))
-//                        .splineToConstantHeading(new Vector2d(-58, -36), Math.toRadians(180))
-//
-//                        .waitSeconds(2)
-//
-//                        //to backdrop //true
-//                        .turn(Math.toRadians(180))
-//                        .splineToConstantHeading(new Vector2d(-34, -56), Math.toRadians(0))
-//                        .lineToConstantHeading(new Vector2d(30, -56))
-//                        .splineToConstantHeading(new Vector2d(46, -33), Math.toRadians(0))
-//
-//                        .waitSeconds(2)
-//
-//                        //park
-//                        .turn(Math.toRadians(180))
-//                        .splineToConstantHeading(new Vector2d(60, -56), Math.toRadians(330))
+                                .lineToLinearHeading(new Pose2d(-33.5, 37, Math.toRadians(320)))
 
-                        .build()
+                                .lineToLinearHeading(new Pose2d(-58, 37, Math.toRadians(180)))
+
+                                .lineToConstantHeading(new Vector2d(-50, 57))
+                                .lineToConstantHeading(new Vector2d(30, 57))
+                                .lineToConstantHeading(new Vector2d(48, 37))
+
+                                .lineToConstantHeading(new Vector2d(30, 57))
+                                .lineToConstantHeading(new Vector2d(-50, 57))
+
+                                .lineToLinearHeading(new Pose2d(-58, 37, Math.toRadians(180)))
+
+                                .lineToConstantHeading(new Vector2d(-50, 57))
+                                .lineToConstantHeading(new Vector2d(30, 57))
+                                .splineToConstantHeading(new Vector2d(midX(30,48), midY(57,37)), lineDirection(30,57,48,37))
+                                .lineToConstantHeading(new Vector2d(48, 37))
+
+                .build()
                 );
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)

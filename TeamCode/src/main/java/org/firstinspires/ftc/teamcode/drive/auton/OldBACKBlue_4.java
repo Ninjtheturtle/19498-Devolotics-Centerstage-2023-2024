@@ -9,14 +9,11 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.controller.PIDController;
-import com.arcrobotics.ftclib.kotlin.extensions.geometry.Vector2dExtKt;
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -33,7 +30,7 @@ import java.util.List;
 
 @Autonomous
 @Config
-public class BACKRedTest4 extends OpMode {
+public class OldBACKBlue_4 extends OpMode {
     // Declaring Hardware
     private SampleMecanumDrive drive;
     private Servo intakeL, intakeR, lockFront, lockBack, vPitchL, vPitchR, launch, pivot;
@@ -76,7 +73,7 @@ public class BACKRedTest4 extends OpMode {
 
     //wait times
     public static int PPPTime = 900;
-    public static int DepositDownTime = 200;
+    public static int DepositDownTime = 100;
     public static int DepositUpTime = 100;
     public static int IntakeTime = 2000;
 
@@ -165,10 +162,10 @@ public class BACKRedTest4 extends OpMode {
 
     // TensorFlow Object Detection
     private static final boolean USE_WEBCAM = true;
-    private static final String TFOD_MODEL_ASSET = "redpropv1.tflite";
+    private static final String TFOD_MODEL_ASSET = "bluepropv1.tflite";
     private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/bluepropv1.tflite";
     private static final String[] LABELS = {
-            "RED",
+            "BLUE",
     };
     private TfodProcessor tfod;
     private VisionPortal visionPortal;
@@ -326,154 +323,153 @@ public class BACKRedTest4 extends OpMode {
 
         // Prop on the left
         traj_left1 = drive.trajectoryBuilder(START_POSE)
-                .lineToSplineHeading(new Pose2d(12, -36, Math.toRadians(180)))
-                .splineToLinearHeading(new Pose2d(50.3, -42.7, Math.toRadians(180)), Math.toRadians(0)) // spike mark and yellow
-                .build();
+                .splineToSplineHeading(new Pose2d(50.9, 42.6, Math.toRadians(180)), Math.toRadians(0))
+                .build(); // spike mark and yellow
 
         traj_left2 = drive.trajectoryBuilder(traj_left1.end())
-                .splineToLinearHeading(new Pose2d(34, -15, Math.toRadians(180)), Math.toRadians(180)) //line to stack
+                .splineToLinearHeading(new Pose2d(40, 15, Math.toRadians(180)), Math.toRadians(180))
                 .build(); // line to stack
 
         traj_left3 = drive.trajectoryBuilder(traj_left2.end())
-                .lineToLinearHeading(new Pose2d(-53, -16, Math.toRadians(180))) //stack
+                .lineToLinearHeading(new Pose2d(-56.5, 15, Math.toRadians(180))) //stack //+ Math.tan(Math.toRadians(180 - 180)) * (40 - (-56))
                 .build(); // go to stack
 
         traj_left103 = drive.trajectoryBuilder(traj_left3.end())
-                .lineToLinearHeading(new Pose2d(-53.005, -16, Math.toRadians(180))) //stack
-                .build();
+                .forward(0.001)
+                .build();// slowly forward
 
         traj_left4 = drive.trajectoryBuilder(traj_left103.end())
-                .lineToLinearHeading(new Pose2d(34, -15, Math.toRadians(180))) //line to bb
-                .build();
+                .lineToLinearHeading(new Pose2d(31, 16, Math.toRadians(180))) //line to bb
+                .build(); //head back
 
         traj_left5 = drive.trajectoryBuilder(traj_left4.end())
-                .lineToLinearHeading(new Pose2d(44, -36, Math.toRadians(180))) //go backdrop
+                .splineToConstantHeading(new Vector2d(48, 39), Math.toRadians(45))
                 .build(); //go backdrop
 
         traj_left6 = drive.trajectoryBuilder(traj_left5.end())
-                .splineToConstantHeading(new Vector2d(34, -15), Math.toRadians(180)) //line to stack
+                .splineToLinearHeading(new Pose2d(40, 15, Math.toRadians(180)), Math.toRadians(180))
                 .build();//line to stack
 
         traj_left7 = drive.trajectoryBuilder(traj_left6.end())
-                .lineToLinearHeading(new Pose2d(-56, -15, Math.toRadians(180))) //stack
+                .lineToLinearHeading(new Pose2d(-56.5, 15, Math.toRadians(180))) //stack //+ Math.tan(Math.toRadians(180 - 180)) * (40 - (-56))
                 .build();//go stack
 
         traj_left107 = drive.trajectoryBuilder(traj_left7.end())
-                .lineToLinearHeading(new Pose2d(-56.005, -15, Math.toRadians(180))) //stack
+                .forward(0.001)
                 .build(); //slowly forward
 
         traj_left8 = drive.trajectoryBuilder(traj_left107.end())
-                .lineToLinearHeading(new Pose2d(34, -16.9, Math.toRadians(178))) //line to bb
+                .lineToLinearHeading(new Pose2d(31, 16, Math.toRadians(180))) //line to bb
                 .build(); //line to bb
 
         traj_left9 = drive.trajectoryBuilder(traj_left8.end())
-                .lineToLinearHeading(new Pose2d(44, -36, Math.toRadians(180))) //go backdrop
+                .splineToConstantHeading(new Vector2d(46.3, 44), Math.toRadians(45))
                 .build(); //go to bb
 
         traj_left10 = drive.trajectoryBuilder(traj_left9.end())
-                .splineToConstantHeading(new Vector2d(59, -67), Math.toRadians(0)) //backdrop
+                .splineToConstantHeading(new Vector2d(59, 67), Math.toRadians(0))
                 .build(); //park
 
 
         // Prop in the middle
         traj_middle1 = drive.trajectoryBuilder(START_POSE)
-                .lineToSplineHeading(new Pose2d(28, -24, Math.toRadians(180)))
-                .splineToLinearHeading(new Pose2d(50.3, -42.7, Math.toRadians(180)), Math.toRadians(0)) // spike mark and yellow
+                .lineToSplineHeading(new Pose2d(36, 24, Math.toRadians(180))) //slowly forward
+                .lineToConstantHeading(new Vector2d(50.3, 36)) //purple and bd
                 .build(); // spike mark
 
         traj_middle2 = drive.trajectoryBuilder(traj_middle1.end())
-                .splineToLinearHeading(new Pose2d(34, -15, Math.toRadians(180)), Math.toRadians(180)) //line to stack
+                .splineToLinearHeading(new Pose2d(34, 15, Math.toRadians(180)), Math.toRadians(180)) //line to stack
                 .build(); // backdrop
 
         traj_middle3 = drive.trajectoryBuilder(traj_middle2.end())
-                .lineToLinearHeading(new Pose2d(-53, -16, Math.toRadians(180))) //stack
+                .lineToLinearHeading(new Pose2d(-53, 16, Math.toRadians(180))) //stack
                 .build(); // line up to stack
 
         traj_middle103 = drive.trajectoryBuilder(traj_middle3.end())
-                .lineToLinearHeading(new Pose2d(-53.01, -16, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(-53.01, 16, Math.toRadians(180)))
                 .build(); // stack
 
         traj_middle4 = drive.trajectoryBuilder(traj_middle103.end())
-                .lineToLinearHeading(new Pose2d(34, -15, Math.toRadians(180))) //line to bb
+                .lineToLinearHeading(new Pose2d(34, 15, Math.toRadians(180))) //line to bb
                 .build(); // stack
 
         traj_middle5 = drive.trajectoryBuilder(traj_middle4.end())
-                .lineToLinearHeading(new Pose2d(44, -36, Math.toRadians(180))) //go backdrop
+                .lineToLinearHeading(new Pose2d(44, 36, Math.toRadians(180))) //go backdrop
                 .build(); // go backdrop
 
         traj_middle6 = drive.trajectoryBuilder(traj_middle5.end())
-                .splineToConstantHeading(new Vector2d(34, -15), Math.toRadians(180)) //line to stack
+                .splineToConstantHeading(new Vector2d(34, 15), Math.toRadians(180)) //line to stack
                 .build(); // backdrop white
 
         traj_middle7 = drive.trajectoryBuilder(traj_middle6.end())
-                .lineToLinearHeading(new Pose2d(-56, -15, Math.toRadians(180))) //stack
+                .lineToLinearHeading(new Pose2d(-56, 15, Math.toRadians(180))) //stack
                 .build();
 
         traj_middle107 = drive.trajectoryBuilder(traj_middle6.end())
-                .lineToLinearHeading(new Pose2d(-56.01, -15, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(-56.01, 15, Math.toRadians(180)))
                 .build();
 
         traj_middle8 = drive.trajectoryBuilder(traj_middle107.end())
-                .lineToLinearHeading(new Pose2d(34, -16.9, Math.toRadians(178))) //line to bb
+                .lineToLinearHeading(new Pose2d(34, 16.9, Math.toRadians(180))) //line to bb
                 .build();
 
         traj_middle9 = drive.trajectoryBuilder(traj_middle8.end())
-                .lineToLinearHeading(new Pose2d(44, -36, Math.toRadians(180))) //go backdrop
+                .lineToLinearHeading(new Pose2d(44, 36, Math.toRadians(180))) //go backdrop
                 .build();
 
         traj_middle10 = drive.trajectoryBuilder(traj_middle9.end())
-                .splineToConstantHeading(new Vector2d(59, -67), Math.toRadians(0)) //backdrop
+                .splineToConstantHeading(new Vector2d(59, 67), Math.toRadians(0)) //backdrop
                 .build();
 
 
         // Prop on the right
         traj_right1 = drive.trajectoryBuilder(START_POSE)
-                .lineToSplineHeading(new Pose2d(32, -36, Math.toRadians(180)))
-                .splineToLinearHeading(new Pose2d(50.3, -42.7, Math.toRadians(180)), Math.toRadians(0)) // spike mark and yellow
+                .splineTo(new Vector2d(9, 36), Math.toRadians(210))
+                .lineToLinearHeading(new Pose2d(49.9, 33, Math.toRadians(180)))
                 .build(); // spike mark
 
         traj_right2 = drive.trajectoryBuilder(traj_right1.end())
-                .splineToLinearHeading(new Pose2d(34, -15, Math.toRadians(180)), Math.toRadians(180)) //line to stack
+                .splineToLinearHeading(new Pose2d(34, 15, Math.toRadians(180)), Math.toRadians(180)) //line to stack
                 .build(); // backdrop
 
         traj_right3 = drive.trajectoryBuilder(traj_right2.end())
-                .lineToLinearHeading(new Pose2d(-53, -16, Math.toRadians(180))) //stack
+                .lineToLinearHeading(new Pose2d(-53, 16, Math.toRadians(180))) //stack
                 .build(); // line up to stack
 
         traj_right103 = drive.trajectoryBuilder(traj_right3.end())
-                .lineToLinearHeading(new Pose2d(-53.01, -16, Math.toRadians(180))) //stack
+                .lineToLinearHeading(new Pose2d(-53.01, 16, Math.toRadians(180))) //stack
                 .build(); // line up to stack
 
         traj_right4 = drive.trajectoryBuilder(traj_right103.end())
-                .lineToLinearHeading(new Pose2d(34, -15, Math.toRadians(180))) //line to bb
+                .lineToLinearHeading(new Pose2d(34, 15, Math.toRadians(180))) //line to bb
                 .build(); // stack
 
         traj_right5 = drive.trajectoryBuilder(traj_right4.end())
-                .lineToLinearHeading(new Pose2d(44, -36, Math.toRadians(180))) //go backdrop
+                .lineToLinearHeading(new Pose2d(44, 36, Math.toRadians(180))) //go backdrop
                 .build(); // go backdrop
 
         traj_right6 = drive.trajectoryBuilder(traj_right5.end())
-                .splineToConstantHeading(new Vector2d(34, -15), Math.toRadians(180)) //line to stack
+                .splineToConstantHeading(new Vector2d(34, 15), Math.toRadians(180)) //line to stack
                 .build(); // backdrop white
 
         traj_right7 = drive.trajectoryBuilder(traj_right6.end())
-                .lineToLinearHeading(new Pose2d(-56, -15, Math.toRadians(180))) //stack
+                .lineToLinearHeading(new Pose2d(-56, 15, Math.toRadians(180))) //stack
                 .build();
 
         traj_right107 = drive.trajectoryBuilder(traj_right7.end())
-                .lineToLinearHeading(new Pose2d(-56.01, -15, Math.toRadians(180))) //stack
+                .lineToLinearHeading(new Pose2d(-56.01, 15, Math.toRadians(180))) //stack
                 .build();
 
         traj_right8 = drive.trajectoryBuilder(traj_right107.end())
-                .lineToLinearHeading(new Pose2d(34, -16.9, Math.toRadians(178))) //line to bb
+                .lineToLinearHeading(new Pose2d(34, 16.9, Math.toRadians(180))) //line to bb
                 .build();
 
         traj_right9 = drive.trajectoryBuilder(traj_right8.end())
-                .lineToLinearHeading(new Pose2d(44, -36, Math.toRadians(180))) //go backdrop
+                .lineToLinearHeading(new Pose2d(44, 36, Math.toRadians(180))) //go backdrop
                 .build();
 
         traj_right10 = drive.trajectoryBuilder(traj_right9.end())
-                .splineToConstantHeading(new Vector2d(59, -67), Math.toRadians(0)) //backdrop
+                .splineToConstantHeading(new Vector2d(59, 67), Math.toRadians(0)) //backdrop
                 .build();
 
         // Build Autonomous Program
@@ -729,7 +725,7 @@ public class BACKRedTest4 extends OpMode {
                                 }
                                 else {
                                     intakePos = intakeUp + 100;
-                                    if (timeout.milliseconds() > 3000) {
+                                    if (timeout.milliseconds() > 800) {
                                         CHANGE_LINE = true;
                                     }
                                 }
@@ -741,6 +737,7 @@ public class BACKRedTest4 extends OpMode {
                             //Check Intaked
                             if (!detected) {
                                 if (!fIn) {
+                                    intakePos = intakeUp + 200;
                                     switch (PROPLOCATION_N) {
                                         case 0:
                                             drive.followTrajectoryAsync(traj_left107);
@@ -755,8 +752,8 @@ public class BACKRedTest4 extends OpMode {
                                     timeout.reset();
                                 }
                                 else {
-                                    intakePos = intakeUp + 100;
-                                    if (timeout.milliseconds() > 3000) {
+                                    intakePos = intakeUp + 300;
+                                    if (timeout.milliseconds() > 800) {
                                         CHANGE_LINE = true;
                                     }
                                 }
@@ -1050,16 +1047,27 @@ public class BACKRedTest4 extends OpMode {
 //        // Trajectory 10
 //        switch (PROPLOCATION_N){
 //            case 0:
-//                followTraj(8);
+//                followTraj(10);
 //                break;
 //            case 1:
-//                followTraj(18);
+//                followTraj(20);
 //                break;
 //            case 2:
-//                followTraj(28);
+//                followTraj(30);
 //                break;
 //        }
-//        waitTrajDone();
 
+//        //put deposit down
+//        waitTime(DepositDownTime); // adjust for when the robot is far enough away from the backdrop
+//        setMotorTarget(VLIFT, 600);
+//        waitTime(200);
+//        setServoPos(LOCKFRONT, lockFD);
+//        setServoPos(LOCKBACK, lockBD);
+//        setServoPos(PIVOT, pivotHome);
+//        waitTime(300);
+//        setServoPos(VPITCH, vPitchIntake);
+//        waitTime(400);
+//        setMotorTarget(VLIFT, -10);
+//        waitTrajDone();
     }
 }
