@@ -113,20 +113,20 @@ public class WINGRed_1 extends OpMode {
     // Autonomous Trajectories
     Pose2d START_POSE = new Pose2d(-37, -64, Math.toRadians(90));
     Trajectory traj_left1 = null;
-    Trajectory traj_left201 = null;
     Trajectory traj_left2 = null;
+    Trajectory traj_left102 = null;
     Trajectory traj_left3 = null;
     Trajectory traj_left4 = null;
 
     Trajectory traj_middle1 = null;
-    Trajectory traj_middle201 = null;
     Trajectory traj_middle2 = null;
+    Trajectory traj_middle102 = null;
     Trajectory traj_middle3 = null;
     Trajectory traj_middle4 = null;
 
     Trajectory traj_right1 = null;
-    Trajectory traj_right201 = null;
     Trajectory traj_right2 = null;
+    Trajectory traj_right102 = null;
     Trajectory traj_right3 = null;
     Trajectory traj_right4 = null;
 
@@ -321,11 +321,11 @@ public class WINGRed_1 extends OpMode {
                 .lineToLinearHeading(new Pose2d(-58, -37, Math.toRadians(180)))
                 .build(); // align stack
 
-        traj_right201 = drive.trajectoryBuilder(traj_right2.end())
+        traj_right102 = drive.trajectoryBuilder(traj_right2.end())
                 .forward(0.005)
                 .build(); // slowly forward
 
-        traj_right3 = drive.trajectoryBuilder(traj_right201.end(), true)
+        traj_right3 = drive.trajectoryBuilder(traj_right102.end(), true)
                 .lineToConstantHeading(new Vector2d(-50, -55))
                 .splineToConstantHeading(new Vector2d(-38, -betweenTrussY - 3), Math.toRadians(0))
                 .lineToConstantHeading(new Vector2d(30, -betweenTrussY - 3))
@@ -333,7 +333,7 @@ public class WINGRed_1 extends OpMode {
                 .lineToConstantHeading(new Vector2d(48, -37))
                 .build(); // backdrop
 
-        traj_right4 = drive.trajectoryBuilder(traj_right4.end())
+        traj_right4 = drive.trajectoryBuilder(traj_right3.end())
                 .splineToConstantHeading(new Vector2d(56, -betweenTrussY + 6), Math.toRadians(330))
                 .build(); //park
 
@@ -347,11 +347,11 @@ public class WINGRed_1 extends OpMode {
                 .lineToLinearHeading(new Pose2d(-58, -37, Math.toRadians(180)))
                 .build(); // move away from spike
 
-        traj_middle201 = drive.trajectoryBuilder(traj_middle2.end())
+        traj_middle102 = drive.trajectoryBuilder(traj_middle2.end())
                 .forward(0.005)
                 .build(); // stack
 
-        traj_middle3 = drive.trajectoryBuilder(traj_middle201.end(), true)
+        traj_middle3 = drive.trajectoryBuilder(traj_middle102.end(), true)
                 .lineToConstantHeading(new Vector2d(-50, -55))
                 .splineToConstantHeading(new Vector2d(-38, -betweenTrussY - 3), Math.toRadians(0))
                 .lineToConstantHeading(new Vector2d(30, -betweenTrussY - 3))
@@ -373,11 +373,11 @@ public class WINGRed_1 extends OpMode {
                 .splineToLinearHeading(new Pose2d(-58, -37, Math.toRadians(180)), Math.toRadians(180))
                 .build(); // move away from spike
 
-        traj_left201 = drive.trajectoryBuilder(traj_left2.end())
+        traj_left102 = drive.trajectoryBuilder(traj_left2.end())
                 .forward(0.005)
                 .build(); // move away from spike
 
-        traj_left3 = drive.trajectoryBuilder(traj_left201.end(), true)
+        traj_left3 = drive.trajectoryBuilder(traj_left102.end(), true)
                 .lineToConstantHeading(new Vector2d(-50, -55))
                 .splineToConstantHeading(new Vector2d(-38, -betweenTrussY - 3), Math.toRadians(0))
                 .lineToConstantHeading(new Vector2d(30, -betweenTrussY - 3))
@@ -574,13 +574,13 @@ public class WINGRed_1 extends OpMode {
                         if (!fIn) {
                             switch (PROPLOCATION_N) {
                                 case 0:
-                                    drive.followTrajectoryAsync(traj_left201);
+                                    drive.followTrajectoryAsync(traj_left102);
                                     break;
                                 case 1:
-                                    drive.followTrajectoryAsync(traj_middle201);
+                                    drive.followTrajectoryAsync(traj_middle102);
                                     break;
                                 case 2:
-                                    drive.followTrajectoryAsync(traj_right201);
+                                    drive.followTrajectoryAsync(traj_right102);
                                     break;
                             }
                             timeout.reset();
