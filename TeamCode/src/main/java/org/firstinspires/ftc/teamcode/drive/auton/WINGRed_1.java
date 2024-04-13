@@ -336,7 +336,8 @@ public class WINGRed_1 extends OpMode {
                 .build(); // backdrop
 
         traj_left4 = drive.trajectoryBuilder(traj_left3.end())
-                .splineToConstantHeading(new Vector2d(56, -64), Math.toRadians(-330))
+                //.splineToConstantHeading(new Vector2d(56, -64), Math.toRadians(-330))
+                .lineToConstantHeading(new Vector2d(44, 64))
                 .build(); //park
 
         // Prop in the middle
@@ -364,7 +365,8 @@ public class WINGRed_1 extends OpMode {
                 .build(); // backdrop
 
         traj_middle4 = drive.trajectoryBuilder(traj_left3.end())
-                .splineToConstantHeading(new Vector2d(56, -64), Math.toRadians(-330))
+                //.splineToConstantHeading(new Vector2d(56, -64), Math.toRadians(-330))
+                .lineToConstantHeading(new Vector2d(44, 64))
                 .build(); //park
 
         // Prop on the right
@@ -392,7 +394,8 @@ public class WINGRed_1 extends OpMode {
                 .build(); // backdrop
 
         traj_right4 = drive.trajectoryBuilder(traj_left3.end())
-                .splineToConstantHeading(new Vector2d(56, -64), Math.toRadians(-330))
+                //.splineToConstantHeading(new Vector2d(56, -64), Math.toRadians(-330))
+                .lineToConstantHeading(new Vector2d(44, 64))
                 .build(); //park
 
         // Build Autonomous Program
