@@ -113,34 +113,31 @@ public class WINGBlue_3 extends OpMode {
     // Autonomous Trajectories
     Pose2d START_POSE = new Pose2d(-37, 64, Math.toRadians(270));
     Trajectory traj_left1 = null;
-    Trajectory traj_left201 = null;
     Trajectory traj_left2 = null;
+    Trajectory traj_left102 = null;
     Trajectory traj_left3 = null;
     Trajectory traj_left4 = null;
+    Trajectory traj_left104 = null;
     Trajectory traj_left5 = null;
     Trajectory traj_left6 = null;
-    Trajectory traj_left7 = null;
-    Trajectory traj_left8 = null;
 
     Trajectory traj_middle1 = null;
-    Trajectory traj_middle201 = null;
     Trajectory traj_middle2 = null;
+    Trajectory traj_middle102 = null;
     Trajectory traj_middle3 = null;
     Trajectory traj_middle4 = null;
+    Trajectory traj_middle104 = null;
     Trajectory traj_middle5 = null;
     Trajectory traj_middle6 = null;
-    Trajectory traj_middle7 = null;
-    Trajectory traj_middle8 = null;
 
     Trajectory traj_right1 = null;
-    Trajectory traj_right201 = null;
     Trajectory traj_right2 = null;
+    Trajectory traj_right102 = null;
     Trajectory traj_right3 = null;
     Trajectory traj_right4 = null;
+    Trajectory traj_right104 = null;
     Trajectory traj_right5 = null;
     Trajectory traj_right6 = null;
-    Trajectory traj_right7 = null;
-    Trajectory traj_right8 = null;
 
     Trajectory adjust = null;
 
@@ -327,13 +324,13 @@ public class WINGBlue_3 extends OpMode {
 
         traj_left2 = drive.trajectoryBuilder(traj_left1.end())
                 .lineToLinearHeading(new Pose2d(-58, 37, Math.toRadians(180)))
-                .build(); // align stack
+                .build(); // align stack+1
 
-        traj_left201 = drive.trajectoryBuilder(traj_left2.end())
+        traj_left102 = drive.trajectoryBuilder(traj_left2.end())
                 .forward(0.005)
                 .build(); // slowly forward
 
-        traj_left3 = drive.trajectoryBuilder(traj_left201.end(), true)
+        traj_left3 = drive.trajectoryBuilder(traj_left102.end(), true)
                 .lineToConstantHeading(new Vector2d(-50, 55))
                 .splineToConstantHeading(new Vector2d(-38, betweenTrussY-1), Math.toRadians(0))
                 .lineToConstantHeading(new Vector2d(30, betweenTrussY-1))
@@ -347,9 +344,13 @@ public class WINGBlue_3 extends OpMode {
                 .lineToConstantHeading(new Vector2d(-38, betweenTrussY-1))
                 .splineToConstantHeading(new Vector2d(midX(-38, -58), midY(betweenTrussY-1, 37)), lineDirection(-38, betweenTrussY-1, -58, 37))
                 .lineToConstantHeading(new Vector2d(-58, 37))
-                .build(); // stack
+                .build(); // stack+2
 
-        traj_left5 = drive.trajectoryBuilder(traj_left4.end(), true)
+        traj_left104 = drive.trajectoryBuilder(traj_left4.end())
+                .forward(0.005)
+                .build(); // slowly forward
+
+        traj_left5 = drive.trajectoryBuilder(traj_left104.end(), true)
                 .lineToConstantHeading(new Vector2d(-50, 55))
                 .splineToConstantHeading(new Vector2d(-38, betweenTrussY-2), Math.toRadians(0))
                 .lineToConstantHeading(new Vector2d(30, betweenTrussY-2))
@@ -371,11 +372,11 @@ public class WINGBlue_3 extends OpMode {
                 .lineToLinearHeading(new Pose2d(-58, 37, Math.toRadians(180)))
                 .build(); // move away from spike
 
-        traj_middle201 = drive.trajectoryBuilder(traj_middle2.end())
+        traj_middle102 = drive.trajectoryBuilder(traj_middle2.end())
                 .forward(0.005)
                 .build(); // stack
 
-        traj_middle3 = drive.trajectoryBuilder(traj_left201.end(), true)
+        traj_middle3 = drive.trajectoryBuilder(traj_left102.end(), true)
                 .lineToConstantHeading(new Vector2d(-50, 55))
                 .splineToConstantHeading(new Vector2d(-38, betweenTrussY-3), Math.toRadians(0))
                 .lineToConstantHeading(new Vector2d(30, betweenTrussY-3))
@@ -389,6 +390,10 @@ public class WINGBlue_3 extends OpMode {
                 .lineToConstantHeading(new Vector2d(-38, betweenTrussY-1))
                 .splineToConstantHeading(new Vector2d(midX(-38, -58), midY(betweenTrussY-1, 37)), lineDirection(-38, betweenTrussY-1, -58, 37))
                 .lineToConstantHeading(new Vector2d(-58, 37))
+                .build(); // stack+2
+
+        traj_middle104 = drive.trajectoryBuilder(traj_middle4.end())
+                .forward(0.005)
                 .build(); // stack
 
         traj_middle5 = drive.trajectoryBuilder(traj_left4.end(), true)
@@ -411,13 +416,13 @@ public class WINGBlue_3 extends OpMode {
         traj_right2 = drive.trajectoryBuilder(traj_right1.end())
                 .lineToConstantHeading(new Vector2d(-35, 40))
                 .splineToLinearHeading(new Pose2d(-58, 37, Math.toRadians(180)), Math.toRadians(180))
-                .build(); // move away from spike
+                .build(); // stack+1
 
-        traj_right201 = drive.trajectoryBuilder(traj_right2.end())
+        traj_right102 = drive.trajectoryBuilder(traj_right2.end())
                 .forward(0.005)
-                .build(); // move away from spike
+                .build(); // slowly forward
 
-        traj_right3 = drive.trajectoryBuilder(traj_left201.end(), true)
+        traj_right3 = drive.trajectoryBuilder(traj_left102.end(), true)
                 .lineToConstantHeading(new Vector2d(-50, 55))
                 .splineToConstantHeading(new Vector2d(-38, betweenTrussY-3), Math.toRadians(0))
                 .lineToConstantHeading(new Vector2d(30, betweenTrussY-3))
@@ -431,9 +436,13 @@ public class WINGBlue_3 extends OpMode {
                 .lineToConstantHeading(new Vector2d(-38, betweenTrussY-1))
                 .splineToConstantHeading(new Vector2d(midX(-38, -58), midY(betweenTrussY-1, 37)), lineDirection(-38, betweenTrussY-1, -58, 37))
                 .lineToConstantHeading(new Vector2d(-58, 37))
-                .build(); // stack
+                .build(); // stack+2
 
-        traj_right5 = drive.trajectoryBuilder(traj_left4.end(), true)
+        traj_right104 = drive.trajectoryBuilder(traj_right4.end())
+                .forward(0.005)
+                .build(); // move away from spike
+
+        traj_right5 = drive.trajectoryBuilder(traj_left104.end(), true)
                 .lineToConstantHeading(new Vector2d(-50, 55))
                 .splineToConstantHeading(new Vector2d(-38, betweenTrussY-2), Math.toRadians(0))
                 .lineToConstantHeading(new Vector2d(30, betweenTrussY-2))
@@ -641,31 +650,63 @@ public class WINGBlue_3 extends OpMode {
                     CHANGE_LINE = true;
                     break;
                 case 8:
-                    //Check Intaked
-                    if (!detected) {
-                        if (!fIn) {
-                            switch (PROPLOCATION_N) {
-                                case 0:
-                                    drive.followTrajectoryAsync(traj_left201);
-                                    break;
-                                case 1:
-                                    drive.followTrajectoryAsync(traj_middle201);
-                                    break;
-                                case 2:
-                                    drive.followTrajectoryAsync(traj_right201);
-                                    break;
-                            }
-                            timeout.reset();
-                        }
-                        else {
-                            if (timeout.milliseconds() > 100) {
+                    switch (arg1) {
+                        case 1:
+                            //Check Intaked
+                            if (!detected) {
+                                if (!fIn) {
+                                    switch (PROPLOCATION_N) {
+                                        case 0:
+                                            drive.followTrajectoryAsync(traj_left102);
+                                            break;
+                                        case 1:
+                                            drive.followTrajectoryAsync(traj_middle102);
+                                            break;
+                                        case 2:
+                                            drive.followTrajectoryAsync(traj_right102);
+                                            break;
+                                    }
+                                    timeout.reset();
+                                }
+                                else {
+                                    intakePos = intakeUp + 100;
+                                    if (timeout.milliseconds() > 800) {
+                                        CHANGE_LINE = true;
+                                    }
+                                }
+                            } else {
                                 CHANGE_LINE = true;
                             }
-                        }
-                    } else {
-                        CHANGE_LINE = true;
+                            break;
+                        case 2:
+                            //Check Intaked
+                            if (!detected) {
+                                if (!fIn) {
+                                    intakePos = intakeUp + 200;
+                                    switch (PROPLOCATION_N) {
+                                        case 0:
+                                            drive.followTrajectoryAsync(traj_left104);
+                                            break;
+                                        case 1:
+                                            drive.followTrajectoryAsync(traj_middle104);
+                                            break;
+                                        case 2:
+                                            drive.followTrajectoryAsync(traj_right104);
+                                            break;
+                                    }
+                                    timeout.reset();
+                                }
+                                else {
+                                    intakePos = intakeUp + 300;
+                                    if (timeout.milliseconds() > 800) {
+                                        CHANGE_LINE = true;
+                                    }
+                                }
+                            } else {
+                                CHANGE_LINE = true;
+                            }
+                            break;
                     }
-                    break;
                 case 11:
                     //put deposit down
                     setMotorTarget(VLIFT, 600); //lift up
