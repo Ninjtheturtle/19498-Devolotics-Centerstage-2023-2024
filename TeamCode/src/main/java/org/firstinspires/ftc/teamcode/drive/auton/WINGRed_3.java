@@ -820,9 +820,7 @@ public class WINGRed_3 extends OpMode {
         PROGRAM.add(new int[]{69, power, 0, 0});
     }
 
-    public void checkIntaked() {
-        PROGRAM.add(new int[]{8, 0, 0, 0});
-    }
+    public void checkIntaked(int numStack) {PROGRAM.add(new int[] {8, numStack, 0, 0});}
 
     public void depositUp(int rowNum) {
         PROGRAM.add(new int[]{11, rowNum, 0, 0});
@@ -850,7 +848,7 @@ public class WINGRed_3 extends OpMode {
                 setMotorPower(1);
                 /*wait*/ waitTrajDone();
                 /*wait*/ waitTime(80);
-                checkIntaked();
+                checkIntaked(1);
                 setMotorPower(-1);
 
                 followTraj(3); //to backdrop
@@ -869,7 +867,7 @@ public class WINGRed_3 extends OpMode {
                 setMotorPower(1);
                 /*wait*/ waitTrajDone();
                 /*wait*/ waitTime(80);
-                checkIntaked();
+                checkIntaked(2);
                 setMotorPower(-1);
 
                 followTraj(5); //to backdrop
@@ -895,7 +893,7 @@ public class WINGRed_3 extends OpMode {
                 setMotorPower(1);
                 /*wait*/ waitTrajDone();
                 /*wait*/ waitTime(80);
-                checkIntaked();
+                checkIntaked(1);
                 setMotorPower(-1);
 
                 followTraj(13); //to backdrop
@@ -914,7 +912,7 @@ public class WINGRed_3 extends OpMode {
                 setMotorPower(1);
                 /*wait*/ waitTrajDone();
                 /*wait*/ waitTime(80);
-                checkIntaked();
+                checkIntaked(2);
                 setMotorPower(-1);
 
                 followTraj(15); //to backdrop
@@ -940,7 +938,7 @@ public class WINGRed_3 extends OpMode {
                 setMotorPower(1);
                 /*wait*/ waitTrajDone();
                 /*wait*/ waitTime(80);
-                checkIntaked();
+                checkIntaked(1);
                 setMotorPower(-1);
 
                 followTraj(23); //to backdrop
@@ -959,7 +957,7 @@ public class WINGRed_3 extends OpMode {
                 setMotorPower(1);
                 /*wait*/ waitTrajDone();
                 /*wait*/ waitTime(80);
-                checkIntaked();
+                checkIntaked(2);
                 setMotorPower(-1);
 
                 followTraj(25); //to backdrop
