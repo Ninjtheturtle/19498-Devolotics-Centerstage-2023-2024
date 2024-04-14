@@ -41,7 +41,6 @@ public class BackSensor extends OpMode {
     private DcMotorEx liftL, liftR, intake, hang;
     DistanceSensor sensorL, sensorR, senseLF, senseLB;
 
-    ColorSensor senseLine;
     boolean ifWhite = false;
 
     // Init Positions
@@ -239,8 +238,6 @@ public class BackSensor extends OpMode {
         //Init Sensors
         senseLF = hardwareMap.get(DistanceSensor.class, "senseLF");
         senseLB = hardwareMap.get(DistanceSensor.class, "senseLB");
-
-        senseLine = hardwareMap.get(ColorSensor.class, "line");
 
         // Init Servos
         intakeL = hardwareMap.get(Servo.class, "s14");
@@ -489,12 +486,6 @@ public class BackSensor extends OpMode {
     @Override
     public void loop() {
 
-        if (senseLine.alpha() > 300) {
-            ifWhite = true;
-        } else {
-            ifWhite = false;
-        }
-
         //TARGET SETTING
         if (vTarget != vTargetTarget) { vTarget += vTargetTarget; }
 
@@ -720,15 +711,6 @@ public class BackSensor extends OpMode {
                     CHANGE_LINE = true;
                     break;
 
-                case 6969:
-                    //check Line
-                    if (!ifWhite) {
-                        drive.followTrajectory(adjust);
-                    } else {
-                        CHANGE_LINE = true;
-                    }
-                    break;
-
                 case 8:
                     switch (arg1) {
                         case 1:
@@ -845,259 +827,10 @@ public class BackSensor extends OpMode {
 
     public void checkIntaked(int numStack) { PROGRAM.add(new int[] {8, numStack, 0, 0}); }
 
-    public void checkLine() { PROGRAM.add(new int[] {6969, 0, 0, 0}); }
-
     public void buildProgram() {
-        //initialize
-        setServoPos(INTAKE, intakeDown);
-        setServoPos(LOCKFRONT, lockFD);
-        setServoPos(LOCKBACK, lockBD);
-        setMotorTarget(VLIFT, 0);
-        waitTime(300);
-
-        // Trajectory 1
-        switch (PROPLOCATION_N){
-            case 0:
-                followTraj(1);
-                break;
-            case 1:
-                followTraj(11);
-                break;
-            case 2:
-                followTraj(21);
-                break;
-        }
-
-        waitTime(200);
-        //deposit up
-        setMotorTarget(VLIFT, targetMed - 70); //slides up
-        waitTime(300);
-        setServoPos(VPITCH, vPitchDeposit); //deposit out
-        waitTime(350);
-        setServoPos(PIVOT, pivotScore); //Q turn
-        setMotorTarget(VLIFT, 300); //deposit down
-        //ppp place
         setServoPos(INTAKE, intakeUp);
-        //place yellow
-        waitTrajDone();
-        setServoPos(LOCKFRONT, lockFU);
-        setServoPos(LOCKBACK, lockBU);
-
-        // Trajectory 2
-        switch (PROPLOCATION_N){
-            case 0:
-                followTraj(2);
-                break;
-            case 1:
-                followTraj(12);
-                break;
-            case 2:
-                followTraj(22);
-                break;
-        }
-
-        waitTime(DepositDownTime); // adjust for when the robot is far enough away from the backdrop
-        //put deposit down
-        setMotorTarget(VLIFT, 600); //lift up
-        waitTime(200);
-        setServoPos(LOCKFRONT, lockFD); //lock down
-        setServoPos(LOCKBACK, lockBD);
-        setServoPos(PIVOT, pivotHome); //q turn back down
-        waitTime(300);
-        setServoPos(VPITCH, vPitchIntake); //turn into robot
-        waitTime(400);
-        setMotorTarget(VLIFT, -10); //lift down
-
-        // Trajectory 3
-        switch (PROPLOCATION_N){
-            case 0:
-                followTraj(3);
-                break;
-            case 1:
-                followTraj(13);
-                break;
-            case 2:
-                followTraj(23);
-                break;
-        }
-
-        waitTime(IntakeTime);
-        //start intaking
         setMotorPower(1);
-        waitTrajDone();
-
-        waitTime(80);
-        //check and reverse intake
-        checkLine();
         checkIntaked(1);
         setMotorPower(-1);
-
-        // Trajectory 4
-        switch (PROPLOCATION_N){
-            case 0:
-                followTraj(4);
-                break;
-            case 1:
-                followTraj(14);
-                break;
-            case 2:
-                followTraj(24);
-                break;
-        }
-
-        waitTrajDone();
-        //stop intake movement
-        setMotorPower(0);
-
-        // Trajectory 5
-        switch (PROPLOCATION_N){
-            case 0:
-                followTraj(5);
-                break;
-            case 1:
-                followTraj(15);
-                break;
-            case 2:
-                followTraj(25);
-                break;
-        }
-
-        //deposit up
-        setServoPos(INTAKE, intakeUp);
-        setMotorTarget(VLIFT, targetMed + 100);
-        waitTime(300);
-        setServoPos(VPITCH, vPitchDeposit);
-        waitTime(350);
-        setServoPos(PIVOT, pivotScore);
-        setMotorTarget(VLIFT, 300);
-
-        //score white pixels
-        waitTrajDone();
-        waitTime(300);
-        setServoPos(LOCKFRONT, lockFU);
-        setServoPos(LOCKBACK, lockBU);
-        waitTime(200);
-
-//         Trajectory 6
-        switch (PROPLOCATION_N){
-            case 0:
-                followTraj(6);
-                break;
-            case 1:
-                followTraj(16);
-                break;
-            case 2:
-                followTraj(26);
-                break;
-        }
-
-
-        //put deposit down
-        waitTime(DepositDownTime); // adjust for when the robot is far enough away from the backdrop
-        setMotorTarget(VLIFT, 600);
-        waitTime(200);
-        setServoPos(LOCKFRONT, lockFD);
-        setServoPos(LOCKBACK, lockBD);
-        setServoPos(PIVOT, pivotHome);
-        waitTime(300);
-        setServoPos(VPITCH, vPitchIntake);
-        waitTime(400);
-        setMotorTarget(VLIFT, -10);
-
-        // Trajectory 7
-        switch (PROPLOCATION_N){
-            case 0:
-                followTraj(7);
-                break;
-            case 1:
-                followTraj(17);
-                break;
-            case 2:
-                followTraj(27 );
-                break;
-        }
-
-        waitTime(IntakeTime);
-        //start intaking
-        setMotorPower(1);
-        waitTrajDone();
-
-        waitTime(80);
-        //check and reverse intake
-        checkIntaked(2);
-        setMotorPower(-1);
-
-//        // Trajectory 8
-        switch (PROPLOCATION_N){
-            case 0:
-                followTraj(8);
-                break;
-            case 1:
-                followTraj(18);
-                break;
-            case 2:
-                followTraj(28);
-                break;
-        }
-        waitTrajDone();
-
-        setMotorPower(0);
-
-        //deposit up
-        setServoPos(INTAKE, intakeUp);
-        setMotorTarget(VLIFT, targetMed + 100);
-        waitTime(300);
-        setServoPos(VPITCH, vPitchDeposit);
-        waitTime(350);
-        setServoPos(PIVOT, pivotScore);
-        setMotorTarget(VLIFT, 300);
-
-        // Trajectory 9
-        switch (PROPLOCATION_N){
-            case 0:
-                followTraj(9);
-                break;
-            case 1:
-                followTraj(19);
-                break;
-            case 2:
-                followTraj(29);
-                break;
-        }
-        waitTrajDone();
-
-        //score white pixels
-        waitTrajDone();
-        waitTrajDone();
-        waitTime(300);
-        setServoPos(LOCKFRONT, lockFU);
-        setServoPos(LOCKBACK, lockBU);
-        waitTime(200);
-
-//        // Trajectory 10
-//        switch (PROPLOCATION_N){
-//            case 0:
-//                followTraj(10);
-//                break;
-//            case 1:
-//                followTraj(20);
-//                break;
-//            case 2:
-//                followTraj(30);
-//                break;
-//        }
-
-//        //put deposit down
-//        waitTime(DepositDownTime); // adjust for when the robot is far enough away from the backdrop
-//        setMotorTarget(VLIFT, 600);
-//        waitTime(200);
-//        setServoPos(LOCKFRONT, lockFD);
-//        setServoPos(LOCKBACK, lockBD);
-//        setServoPos(PIVOT, pivotHome);
-//        waitTime(300);
-//        setServoPos(VPITCH, vPitchIntake);
-//        waitTime(400);
-//        setMotorTarget(VLIFT, -10);
-//        waitTrajDone();
     }
 }

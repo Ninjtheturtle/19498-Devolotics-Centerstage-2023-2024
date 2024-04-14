@@ -26,7 +26,7 @@ public class TeleOpRed extends OpMode
 {
     //HARDWARE
     private SampleMecanumDrive drive;
-    private Servo intakeL, intakeR, lockFront, lockBack, vPitchL, vPitchR, launch, pivot;
+    private Servo intakeL, intakeR, lockFront, lockBack, vPitchL, vPitchR, launch, pivot, hangL, hangR;
     private DcMotorEx liftL, liftR, intake, hang;
     DistanceSensor sensorL, sensorR, senseLF, senseLB;
 
@@ -58,7 +58,7 @@ public class TeleOpRed extends OpMode
     int backDistanceThreshold = 25;
 
     //vPitch servo positions
-    double vPitchIntake = 0.91;
+    double vPitchIntake = 0.96;
     double vPitchDeposit = 0.04;
 
     //intake servo positions
@@ -140,6 +140,11 @@ public class TeleOpRed extends OpMode
         intakeR = hardwareMap.get(Servo.class, "s1");
         intakeR.setDirection(Servo.Direction.FORWARD);
 
+        hangL = hardwareMap.get(Servo.class, "s15");
+        hangL.setDirection(Servo.Direction.FORWARD);
+        hangR = hardwareMap.get(Servo.class, "s5");
+        hangR.setDirection(Servo.Direction.REVERSE);
+
         lockFront = hardwareMap.get(Servo.class, "s10");
         lockFront.setDirection(Servo.Direction.FORWARD);
         lockBack = hardwareMap.get(Servo.class, "s2");
@@ -191,6 +196,8 @@ public class TeleOpRed extends OpMode
         imu.initialize(parameters);
 
         launch.setPosition(0);
+        hangL.setPosition(0);
+        hangR.setPosition(0);
     }
 
     public void start() {
@@ -267,22 +274,10 @@ public class TeleOpRed extends OpMode
 
 //        Throttle turning speed with gamepad 2
         if (gamepad2.a) {
-            turnSpeed = 0.2;
+            turnSpeed = 0.4;
         } else {
             turnSpeed = 1;
         }
-
-        //Hanging button
-        boolean hanging = gamepad2.x;
-        if (hanging && !prevHanging) {
-            isHanging = !isHanging;
-        }
-        if (isHanging) {
-            hang.setPower(gamepad2.right_trigger - gamepad2.left_trigger);
-        } else {
-            hang.setPower(hangFeed + gamepad2.right_trigger - gamepad2.left_trigger);
-        }
-        prevHanging = hanging;
 
         //vTarget Up Down
         if (gamepad1.right_bumper) {
@@ -364,6 +359,11 @@ public class TeleOpRed extends OpMode
         //Drone Launch
         if (gamepad2.y) {
             launch.setPosition(launched);
+        }
+
+        if (gamepad2.x) {
+            hangL.setPosition(0.4);
+            hangR.setPosition(0.4);
         }
 
         //region controls

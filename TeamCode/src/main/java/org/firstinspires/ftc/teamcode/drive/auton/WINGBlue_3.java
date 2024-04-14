@@ -56,8 +56,8 @@ public class WINGBlue_3 extends OpMode {
 
 
     // Intake Servo Positions
-    int intakeDown = 460;
-    int intakeUp = 220;
+    int intakeDown = 500;
+    int intakeUp = 150;
 
     // Locking Servo Positions
     int lockFU = 0;
@@ -317,11 +317,11 @@ public class WINGBlue_3 extends OpMode {
                 .build(); // spike mark
 
         traj_left2 = drive.trajectoryBuilder(traj_left1.end())
-                .lineToLinearHeading(new Pose2d(-58, 37, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(-56, 37, Math.toRadians(180)))
                 .build(); // align stack
 
         traj_left201 = drive.trajectoryBuilder(traj_left2.end())
-                .forward(0.005)
+                .forward(0.001)
                 .build(); // slowly forward
 
         traj_left3 = drive.trajectoryBuilder(traj_left201.end(), true)
@@ -349,7 +349,7 @@ public class WINGBlue_3 extends OpMode {
                 .build(); // backdrop
 
         traj_left6 = drive.trajectoryBuilder(traj_left5.end())
-                .splineToConstantHeading(new Vector2d(56, betweenTrussY+6), Math.toRadians(330))
+                .lineToConstantHeading(new Vector2d(40, 58))
                 .build(); //park
 
         // Prop in the middle
@@ -391,7 +391,7 @@ public class WINGBlue_3 extends OpMode {
                 .build(); // backdrop
 
         traj_middle6 = drive.trajectoryBuilder(traj_left5.end())
-                .splineToConstantHeading(new Vector2d(60, betweenTrussY-2), Math.toRadians(350))
+                .lineToConstantHeading(new Vector2d(60, 58))
                 .build();
 
         // Prop on the right
@@ -427,7 +427,7 @@ public class WINGBlue_3 extends OpMode {
                 .build(); // backdrop
 
         traj_right6 = drive.trajectoryBuilder(traj_right5.end())
-                .splineToConstantHeading(new Vector2d(60, 58), Math.toRadians(330))
+                .lineToConstantHeading(new Vector2d(60, 58))
                 .build(); //park
 
         // Build Autonomous Program
@@ -731,23 +731,52 @@ public class WINGBlue_3 extends OpMode {
                 setMotorPower(-1);
 
                 followTraj(3);
-                waitTrajDone();
-                setMotorPower(0);
-
-                followTraj(4);
+                waitTime(1000);
                 setMotorTarget(VLIFT, targetMed - 70);
                 waitTime(500);
                 setServoPos(VPITCH, vPitchDeposit);
                 waitTime(500);
                 setServoPos(PIVOT, pivotScore);
                 setMotorTarget(VLIFT, 300);
+                setMotorPower(0);
+                waitTrajDone();
+                setServoPos(LOCKFRONT, lockFU);
+                setServoPos(LOCKBACK, lockBU);
+
+                followTraj(4);
+                waitTime(500);
+                setMotorTarget(VLIFT, 600);
+                waitTime(200);
+                setServoPos(LOCKFRONT, lockFD);
+                setServoPos(LOCKBACK, lockBD);
+                setServoPos(PIVOT, pivotHome);
+                waitTime(400);
+                setServoPos(VPITCH, vPitchIntake);
+                waitTime(800);
+                setMotorTarget(VLIFT, -10);
+
+                waitTime(600);
+                setMotorPower(1);
+                waitTrajDone();
+                waitTime(80);
+                checkIntaked();
+                setMotorPower(-1);
 
                 followTraj(5);
+                waitTime(1000);
+                setMotorTarget(VLIFT, targetMed - 70);
+                waitTime(500);
+                setServoPos(VPITCH, vPitchDeposit);
+                waitTime(500);
+                setServoPos(PIVOT, pivotScore);
+                setMotorTarget(VLIFT, 300);
+                setMotorPower(0);
                 waitTrajDone();
                 setServoPos(LOCKFRONT, lockFU);
                 setServoPos(LOCKBACK, lockBU);
 
                 followTraj(6);
+                waitTime(1000);
                 setMotorTarget(VLIFT, 600);
                 waitTime(200);
                 setServoPos(LOCKFRONT, lockFD);
