@@ -663,13 +663,12 @@ public class BACKRed_4 extends OpMode {
                     intake.setPower((double) -arg1);
                     CHANGE_LINE = true;
                     break;
-                case 8:
+                case 8: //Check Intaked
                     switch (arg1) {
                         case 1:
-                            //Check Intaked
-                            if (!detected) {
-                                if (!fIn) {
-                                    switch (PROPLOCATION_N) {
+                            if (!detected) { //if both aren't detected
+                                if (!fIn) { //if front is not detected
+                                    switch (PROPLOCATION_N) { //slowly move forward
                                         case 0:
                                             drive.followTrajectoryAsync(traj_left103);
                                             break;
@@ -681,14 +680,16 @@ public class BACKRed_4 extends OpMode {
                                             break;
                                     }
                                     timeout.reset();
-                                } else {
-                                    intakePos = intakeUp + 100;
-                                    if (timeout.milliseconds() > 800) {
-                                        CHANGE_LINE = true;
+                                }
+                                else {
+                                    intakePos = intakeUp + 100; //intake down
+                                    if (timeout.milliseconds() > 800) { //if over 800 milliseconds
+                                        CHANGE_LINE = true; //move on
                                     }
                                 }
-                            } else {
-                                CHANGE_LINE = true;
+                            }
+                            else { //if both are detected
+                                CHANGE_LINE = true; //continue to next traj
                             }
                             break;
                         case 2:

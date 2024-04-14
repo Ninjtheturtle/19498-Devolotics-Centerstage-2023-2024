@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.drive.auton;
+package org.firstinspires.ftc.teamcode.drive.auton.obsolete;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.BRAKE;
 
@@ -708,9 +708,29 @@ public class OldBACKBlue_4 extends OpMode {
                     switch (arg1) {
                         case 1:
                             //Check Intaked
-                            if (!detected) {
-                                if (!fIn) {
-                                    switch (PROPLOCATION_N) {
+                            if (!detected) { //if both aren't detected
+                                if (fIn || bIn) { //if either one is detected
+                                    intakePos = intakeUp + 100; //intake down
+                                    if (timeout.milliseconds() > 300) { //once over 300 milliseconds
+                                        switch (PROPLOCATION_N) { //move back 3 inches
+//                                            case 0:
+//                                                drive.followTrajectoryAsync(traj_left203);
+//                                                break;
+//                                            case 1:
+//                                                drive.followTrajectoryAsync(traj_middle203);
+//                                                break;
+//                                            case 2:
+//                                                drive.followTrajectoryAsync(traj_right203);
+//                                                break;
+                                        }
+                                        intakePos = intakeUp + 300; //intake down to ground
+                                        CHANGE_LINE = true; //move on
+                                    }
+                                    timeout.reset();
+                                }
+                                else {
+                                    intakePos = intakeUp - 100; //intake up to unstuck pixels
+                                    switch (PROPLOCATION_N) { //slowly move forward
                                         case 0:
                                             drive.followTrajectoryAsync(traj_left103);
                                             break;
@@ -721,22 +741,39 @@ public class OldBACKBlue_4 extends OpMode {
                                             drive.followTrajectoryAsync(traj_right103);
                                             break;
                                     }
-                                    timeout.reset();
-                                }
-                                else {
-                                    intakePos = intakeUp + 100;
-                                    if (timeout.milliseconds() > 800) {
-                                        CHANGE_LINE = true;
+                                    intakePos = intakeUp + 200; //intake down more
+                                    if (timeout.milliseconds() > 300) { //once over 300 milliseconds
+                                        switch (PROPLOCATION_N) { //move back 3 inches
+//                                            case 0:
+//                                                drive.followTrajectoryAsync(traj_left203);
+//                                                break;
+//                                            case 1:
+//                                                drive.followTrajectoryAsync(traj_middle203);
+//                                                break;
+//                                            case 2:
+//                                                drive.followTrajectoryAsync(traj_right203);
+//                                                break;
+                                        }
+                                        intakePos = intakeUp + 200; //intake down more
+                                        CHANGE_LINE = true; //move on
                                     }
                                 }
-                            } else {
-                                CHANGE_LINE = true;
+                            }
+                            else { //if both is detected
+                                CHANGE_LINE = true; //move on
                             }
                             break;
                         case 2:
                             //Check Intaked
                             if (!detected) {
-                                if (!fIn) {
+                                if (fIn || bIn) {
+                                    intakePos = intakeUp + 100; //intake down
+                                    if (timeout.milliseconds() > 800) { //if over 800 milliseconds
+                                        CHANGE_LINE = true; //move on
+                                    }
+                                    timeout.reset();
+                                }
+                                else {
                                     intakePos = intakeUp + 200;
                                     switch (PROPLOCATION_N) {
                                         case 0:
@@ -750,12 +787,6 @@ public class OldBACKBlue_4 extends OpMode {
                                             break;
                                     }
                                     timeout.reset();
-                                }
-                                else {
-                                    intakePos = intakeUp + 300;
-                                    if (timeout.milliseconds() > 800) {
-                                        CHANGE_LINE = true;
-                                    }
                                 }
                             } else {
                                 CHANGE_LINE = true;
