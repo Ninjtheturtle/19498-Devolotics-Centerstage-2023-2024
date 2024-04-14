@@ -8,14 +8,11 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.controller.PIDController;
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -31,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Autonomous
-public class WINGRed extends OpMode {
+public class WINGBlue_1 extends OpMode {
     private SampleMecanumDrive drive;
     private Servo intakeL, intakeR, lockFront, lockBack, vPitchL, vPitchR, launch, pivot;
     private DcMotorEx liftL, liftR, intake, hang;
@@ -40,6 +37,19 @@ public class WINGRed extends OpMode {
     // Init Positions
     public final int  INTAKE = 0, VPITCH = 1, VLIFT = 0, LOCKFRONT = 2, LOCKBACK = 3, PIVOT = 5;
 
+    //wait times
+    //auton times
+    public static int PPPTime = 900;
+    public static int AwayFromBBTime = 100;
+    public static int IntakeTime = 2000;
+    //deposit times
+    public static int TurnQTime = 40;
+    public static int UpDepositTime = 130;
+    public static int DownDepositTime = 250;
+
+    //auton positions
+    public static double betweenTrussY = 58;
+
     // Veritcal Pitch Servo Postions
     int vPitchIntake = 910;
     int vPitchDeposit = 40;
@@ -47,7 +57,7 @@ public class WINGRed extends OpMode {
 
     // Intake Servo Positions
     int intakeDown = 460;
-    int intakeUp = 220;
+    int intakeUp = 260;
 
     // Locking Servo Positions
     int lockFU = 0;
@@ -101,36 +111,24 @@ public class WINGRed extends OpMode {
     String PROPLOCATION_S = "left";
 
     // Autonomous Trajectories
-    Pose2d START_POSE = new Pose2d(-37, -64, Math.toRadians(90));
+    Pose2d START_POSE = new Pose2d(-37, 64, Math.toRadians(270));
     Trajectory traj_left1 = null;
-    Trajectory traj_left201 = null;
     Trajectory traj_left2 = null;
+    Trajectory traj_left102 = null;
     Trajectory traj_left3 = null;
     Trajectory traj_left4 = null;
-    Trajectory traj_left5 = null;
-    Trajectory traj_left6 = null;
-    Trajectory traj_left7 = null;
-    Trajectory traj_left8 = null;
 
     Trajectory traj_middle1 = null;
-    Trajectory traj_middle201 = null;
     Trajectory traj_middle2 = null;
+    Trajectory traj_middle102 = null;
     Trajectory traj_middle3 = null;
     Trajectory traj_middle4 = null;
-    Trajectory traj_middle5 = null;
-    Trajectory traj_middle6 = null;
-    Trajectory traj_middle7 = null;
-    Trajectory traj_middle8 = null;
 
     Trajectory traj_right1 = null;
-    Trajectory traj_right201 = null;
     Trajectory traj_right2 = null;
+    Trajectory traj_right102 = null;
     Trajectory traj_right3 = null;
     Trajectory traj_right4 = null;
-    Trajectory traj_right5 = null;
-    Trajectory traj_right6 = null;
-    Trajectory traj_right7 = null;
-    Trajectory traj_right8 = null;
 
     Trajectory adjust = null;
 
@@ -144,14 +142,22 @@ public class WINGRed extends OpMode {
 
     // TensorFlow Object Detection
     private static final boolean USE_WEBCAM = true;
-    private static final String TFOD_MODEL_ASSET = "bluepropv1.tflite";
+    private static final String TFOD_MODEL_ASSET = "redpropv1.tflite";
     private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/bluepropv1.tflite";
     private static final String[] LABELS = {
-            "BLUE",
+            "RED",
     };
     private TfodProcessor tfod;
     private VisionPortal visionPortal;
-
+    public static double lineDirection(double startPointX, double startPointY, double endPointX, double endPointY){
+        return Math.atan2(endPointY - startPointY, endPointX - startPointX);
+    }
+    public static double midX(double startPointX, double endPointX){
+        return (endPointX + startPointX) / 2;
+    }
+    public static double midY(double startPointY, double endPointY){
+        return (endPointY + startPointY) / 2;
+    }
     private void Tfod_init() {
         tfod = new TfodProcessor.Builder()
 //            .setModelAssetName(TFOD_MODEL_ASSET)
@@ -190,7 +196,7 @@ public class WINGRed extends OpMode {
             double x = (currentRecognitions_first.getLeft() + currentRecognitions_first.getRight()) / 2 ;
             double y = (currentRecognitions_first.getTop()  + currentRecognitions_first.getBottom()) / 2 ;
 
-            if(x < 260 && y < 250) {
+            if(x < 280 && y < 250) {
                 PROPLOCATION = "middle";
             } else {
                 PROPLOCATION = "right";
@@ -303,111 +309,90 @@ public class WINGRed extends OpMode {
         drive.setPoseEstimate(START_POSE);
 
         // Prop on the left
+        int leftTruss1 = 57;
+
         traj_left1 = drive.trajectoryBuilder(START_POSE)
-                .splineTo(new Vector2d(-32, -34), Math.toRadians(320))
+                .splineTo(new Vector2d(-33.5, 37), Math.toRadians(320))
                 .build(); // spike mark
 
         traj_left2 = drive.trajectoryBuilder(traj_left1.end())
-                .lineToLinearHeading(new Pose2d(-58, -36, Math.toRadians(180)))
-                .build(); // align stack
+                .lineToLinearHeading(new Pose2d(-58, 37, Math.toRadians(180)))
+                .build(); // align stack+1
 
-        traj_left201 = drive.trajectoryBuilder(traj_left2.end())
+        traj_left102 = drive.trajectoryBuilder(traj_left2.end())
                 .forward(0.005)
                 .build(); // slowly forward
 
-        traj_left3 = drive.trajectoryBuilder(traj_left201.end(), true)
-                .splineToConstantHeading(new Vector2d(-34, -56), Math.toRadians(0))
-                .lineToConstantHeading(new Vector2d(30, -56))
-                .splineToConstantHeading(new Vector2d(46, -33), Math.toRadians(0))
-                .build(); // stack
-
-        traj_left4 = drive.trajectoryBuilder(traj_left3.end())
-                .splineToConstantHeading(new Vector2d(30, -56), Math.toRadians(180))
-                .lineToConstantHeading(new Vector2d(-34, -56))
-                .splineToConstantHeading(new Vector2d(-58, -36), Math.toRadians(180))
-                .build(); // go backdrop
-
-        traj_left5 = drive.trajectoryBuilder(traj_left4.end(), true)
-                .splineToConstantHeading(new Vector2d(-34, -56), Math.toRadians(0))
-                .lineToConstantHeading(new Vector2d(30, -56))
-                .splineToConstantHeading(new Vector2d(46, -33), Math.toRadians(0))
+        traj_left3 = drive.trajectoryBuilder(traj_left102.end(), true)
+                .lineToConstantHeading(new Vector2d(-50, leftTruss1))
+                .splineToConstantHeading(new Vector2d(-38, leftTruss1), Math.toRadians(0))
+                .lineToConstantHeading(new Vector2d(30, leftTruss1))
+                .splineToConstantHeading(new Vector2d(midX(30,48), midY(leftTruss1,37)), lineDirection(30,leftTruss1,48,37))
+                .lineToConstantHeading(new Vector2d(48, 37))
                 .build(); // backdrop
 
-        traj_left6 = drive.trajectoryBuilder(traj_left5.end())
-                .splineToConstantHeading(new Vector2d(60, -56), Math.toRadians(330))
-                .build();
-
-        traj_left7 = drive.trajectoryBuilder(traj_left6.end())
-                .lineToLinearHeading(new Pose2d(60, -62, Math.toRadians(180)))
-                .build();
+        traj_left4 = drive.trajectoryBuilder(traj_left3.end())
+                //.splineToConstantHeading(new Vector2d(56, 64), Math.toRadians(330))
+                .lineToConstantHeading(new Vector2d(44, 64))
+                .build(); //park
 
         // Prop in the middle
+        int middleTruss1 = 57;
+
         traj_middle1 = drive.trajectoryBuilder(START_POSE)
-                .lineToLinearHeading(new Pose2d(-36, -36, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(-36, 37, Math.toRadians(270)))
+                .splineToConstantHeading(new Vector2d(-36, 40), Math.toRadians(180))
                 .build(); // spike mark
 
         traj_middle2 = drive.trajectoryBuilder(traj_middle1.end())
-                .lineToConstantHeading(new Vector2d(-36, -42))
-                .lineToSplineHeading(new Pose2d(-58, -36, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(-58, 37, Math.toRadians(180)))
                 .build(); // move away from spike
 
-        traj_middle201 = drive.trajectoryBuilder(traj_middle2.end())
-                .lineToConstantHeading(new Vector2d(-58.01, -36))
-                .build(); // move away from spike
-
-        traj_middle3 = drive.trajectoryBuilder(traj_middle201.end())
-                .lineToLinearHeading(new Pose2d(-34, -60, Math.toRadians(180)))
+        traj_middle102 = drive.trajectoryBuilder(traj_middle2.end())
+                .forward(0.005)
                 .build(); // stack
 
-        traj_middle4 = drive.trajectoryBuilder(traj_middle3.end())
-                .lineToLinearHeading(new Pose2d(30, -60, Math.toRadians(180)))
-                .build(); // go backdrop
-
-        traj_middle5 = drive.trajectoryBuilder(traj_middle4.end())
-                .lineToLinearHeading(new Pose2d(46, -36, Math.toRadians(180)))
+        traj_middle3 = drive.trajectoryBuilder(traj_left102.end(), true)
+                .lineToConstantHeading(new Vector2d(-50, middleTruss1))
+                .splineToConstantHeading(new Vector2d(-38, middleTruss1), Math.toRadians(0))
+                .lineToConstantHeading(new Vector2d(30, middleTruss1))
+                .splineToConstantHeading(new Vector2d(midX(30,48), midY(middleTruss1,37)), lineDirection(30,middleTruss1,48,37))
+                .lineToConstantHeading(new Vector2d(48, 37))
                 .build(); // backdrop
 
-        traj_middle6 = drive.trajectoryBuilder(traj_middle5.end())
-                .lineToLinearHeading(new Pose2d(40, -60, Math.toRadians(180)))
-                .build();
-
-        traj_middle7 = drive.trajectoryBuilder(traj_middle6.end())
-                .lineToLinearHeading(new Pose2d(60, -62, Math.toRadians(180)))
-                .build();
+        traj_middle4 = drive.trajectoryBuilder(traj_left3.end())
+                //.splineToConstantHeading(new Vector2d(56, 64), Math.toRadians(330))
+                .lineToConstantHeading(new Vector2d(44, 64))
+                .build(); //park
 
         // Prop on the right
+        int rightTruss1 = 57;
+
         traj_right1 = drive.trajectoryBuilder(START_POSE)
-                .splineTo(new Vector2d(-30, -36), Math.toRadians(60))
+                .lineToLinearHeading(new Pose2d(-36, 25, Math.toRadians(180)))
                 .build(); // spike mark
 
         traj_right2 = drive.trajectoryBuilder(traj_right1.end())
-                .lineToConstantHeading(new Vector2d(-45, -45))
-                .splineToLinearHeading(new Pose2d(-58, -36, Math.toRadians(180)), Math.toRadians(180))
-                .build(); // align stack
+                .lineToConstantHeading(new Vector2d(-35, 40))
+                .splineToLinearHeading(new Pose2d(-58, 37, Math.toRadians(180)), Math.toRadians(180))
+                .build(); // stack+1
 
-        traj_right201 = drive.trajectoryBuilder(traj_right2.end())
-                .lineToConstantHeading(new Vector2d(-58.01, -36))
-                .build(); // align stack
+        traj_right102 = drive.trajectoryBuilder(traj_right2.end())
+                .forward(0.005)
+                .build(); // slowly forward
 
-        traj_right3 = drive.trajectoryBuilder(traj_right201.end())
-                .lineToLinearHeading(new Pose2d(-34, -60, Math.toRadians(180)))
-                .build(); // stack
-
-        traj_right4 = drive.trajectoryBuilder(traj_right3.end())
-                .lineToLinearHeading(new Pose2d(30, -60, Math.toRadians(180)))
-                .build(); // go backdrop
-
-        traj_right5 = drive.trajectoryBuilder(traj_right4.end())
-                .lineToLinearHeading(new Pose2d(46, -39, Math.toRadians(180)))
+        traj_right3 = drive.trajectoryBuilder(traj_left102.end(), true)
+                .lineToConstantHeading(new Vector2d(-50, rightTruss1))
+                .splineToConstantHeading(new Vector2d(-38, rightTruss1), Math.toRadians(0))
+                .lineToConstantHeading(new Vector2d(30, rightTruss1))
+                .splineToConstantHeading(new Vector2d(midX(30,48), midY(rightTruss1,37)), lineDirection(30,rightTruss1,48,37))
+                .lineToConstantHeading(new Vector2d(48, 37))
                 .build(); // backdrop
 
-        traj_right6 = drive.trajectoryBuilder(traj_right5.end())
-                .lineToLinearHeading(new Pose2d(40, -60, Math.toRadians(180)))
-                .build();
-
-        traj_right7 = drive.trajectoryBuilder(traj_right6.end())
-                .lineToLinearHeading(new Pose2d(60, -62, Math.toRadians(180)))
-                .build();
+        traj_right4 = drive.trajectoryBuilder(traj_left3.end())
+                //.splineToConstantHeading(new Vector2d(56, 64), Math.toRadians(330))
+                .lineToConstantHeading(new Vector2d(44, 64))
+                .build(); //park
 
         // Build Autonomous Program
         buildProgram();
@@ -523,18 +508,6 @@ public class WINGRed extends OpMode {
                         case 4:
                             drive.followTrajectoryAsync(traj_left4);
                             break;
-                        case 5:
-                            drive.followTrajectoryAsync(traj_left5);
-                            break;
-                        case 6:
-                            drive.followTrajectoryAsync(traj_left6);
-                            break;
-                        case 7:
-                            drive.followTrajectoryAsync(traj_left7);
-                            break;
-                        case 8:
-                            drive.followTrajectoryAsync(traj_left8);
-                            break;
                         case 11:
                             drive.followTrajectoryAsync(traj_middle1);
                             break;
@@ -547,18 +520,6 @@ public class WINGRed extends OpMode {
                         case 14:
                             drive.followTrajectoryAsync(traj_middle4);
                             break;
-                        case 15:
-                            drive.followTrajectoryAsync(traj_middle5);
-                            break;
-                        case 16:
-                            drive.followTrajectoryAsync(traj_middle6);
-                            break;
-                        case 17:
-                            drive.followTrajectoryAsync(traj_middle7);
-                            break;
-                        case 18:
-                            drive.followTrajectoryAsync(traj_middle8);
-                            break;
                         case 21:
                             drive.followTrajectoryAsync(traj_right1);
                             break;
@@ -570,18 +531,6 @@ public class WINGRed extends OpMode {
                             break;
                         case 24:
                             drive.followTrajectoryAsync(traj_right4);
-                            break;
-                        case 25:
-                            drive.followTrajectoryAsync(traj_right5);
-                            break;
-                        case 26:
-                            drive.followTrajectoryAsync(traj_right6);
-                            break;
-                        case 27:
-                            drive.followTrajectoryAsync(traj_right7);
-                            break;
-                        case 28:
-                            drive.followTrajectoryAsync(traj_right8);
                             break;
                     }
                     CHANGE_LINE = true;
@@ -628,19 +577,19 @@ public class WINGRed extends OpMode {
                         if (!fIn) {
                             switch (PROPLOCATION_N) {
                                 case 0:
-                                    drive.followTrajectoryAsync(traj_left201);
+                                    drive.followTrajectoryAsync(traj_left102);
                                     break;
                                 case 1:
-                                    drive.followTrajectoryAsync(traj_middle201);
+                                    drive.followTrajectoryAsync(traj_middle102);
                                     break;
                                 case 2:
-                                    drive.followTrajectoryAsync(traj_right201);
+                                    drive.followTrajectoryAsync(traj_right102);
                                     break;
                             }
                             timeout.reset();
                         }
                         else {
-                            if (timeout.milliseconds() > 3000) {
+                            if (timeout.milliseconds() > 100) {
                                 CHANGE_LINE = true;
                             }
                         }
@@ -648,6 +597,36 @@ public class WINGRed extends OpMode {
                         CHANGE_LINE = true;
                     }
                     break;
+                case 11:
+                    //put deposit down
+                    setMotorTarget(VLIFT, 600); //lift up
+                    setServoPos(LOCKFRONT, lockFD); //lock down
+                    setServoPos(LOCKBACK, lockBD);
+                    setServoPos(PIVOT, pivotHome); //q turn back down
+                    waitTime(TurnQTime);
+                    setServoPos(VPITCH, vPitchIntake); //turn into robot
+                    waitTime(DownDepositTime);
+                    setMotorTarget(VLIFT, -10); //lift down
+                case 12:
+                    switch (arg1) {
+                        case 1: //place first row
+                            //deposit up
+                            setMotorTarget(VLIFT, targetMed - 70); //slides up
+                            waitTime(UpDepositTime);
+                            setServoPos(VPITCH, vPitchDeposit); //deposit out
+                            waitTime(TurnQTime);
+                            setServoPos(PIVOT, pivotScore); //Q turn
+                            setMotorTarget(VLIFT, 300); //deposit down
+                            break;
+                        case 2: //random white pixel drop height
+                            //deposit up
+                            setMotorTarget(VLIFT, targetMed - 70); //slides up
+                            waitTime(UpDepositTime);
+                            setServoPos(VPITCH, vPitchDeposit); //deposit out
+                            waitTime(TurnQTime);
+                            setServoPos(PIVOT, pivotScore); //Q turn
+                            break;
+                    }
             }
 
             prevLine = line;
@@ -655,6 +634,7 @@ public class WINGRed extends OpMode {
                 line += 1;
             }
         }
+
 
         drive.update();
 
@@ -705,6 +685,8 @@ public class WINGRed extends OpMode {
     public void setMotorPower(int power) {PROGRAM.add(new int[] {69, power, 0, 0});}
 
     public void checkIntaked() { PROGRAM.add(new int[] {8, 0, 0, 0}); }
+    public void depositUp(int rowNum) {PROGRAM.add(new int[] {11, rowNum, 0, 0});}
+    public void depositDown() {PROGRAM.add(new int[] {12, 0, 0, 0});}
 
     public void buildProgram() {
         setServoPos(INTAKE, intakeDown);
@@ -713,126 +695,84 @@ public class WINGRed extends OpMode {
         setMotorTarget(VLIFT, 0);
         waitTime(500);
 
-        // Trajectory 1
-        switch (PROPLOCATION_N){
+        switch (PROPLOCATION_N) {
             case 0:
-                followTraj(1);
+                followTraj(1); //ppp
+                /*wait*/ waitTrajDone();
+                setServoPos(INTAKE, intakeUp);
+
+                followTraj(2); //stack+1
+                /*wait*/ waitTime(150);
+                setMotorPower(1);
+                /*wait*/ waitTrajDone();
+                /*wait*/ waitTime(80);
+                checkIntaked();
+                setMotorPower(-1);
+
+                followTraj(3); //to backdrop
+                /*wait*/ waitTime(500);
+                setMotorPower(0);
+                /*wait*/ waitTime(1300);
+                depositUp(1);
+                /*wait*/ waitTrajDone();
+                setServoPos(LOCKFRONT, lockFU);
+                setServoPos(LOCKBACK, lockBU);
+
+                followTraj(4); //park
+                /*wait*/ waitTime(200);
+                depositDown();
                 break;
             case 1:
-                followTraj(11);
+                followTraj(11); //ppp
+                /*wait*/ waitTrajDone();
+                setServoPos(INTAKE, intakeUp);
+
+                followTraj(12); //stack+1
+                /*wait*/ waitTime(600);
+                setMotorPower(1);
+                /*wait*/ waitTrajDone();
+                /*wait*/ waitTime(80);
+                checkIntaked();
+                setMotorPower(-1);
+
+                followTraj(13); //to backdrop
+                /*wait*/ waitTime(500);
+                setMotorPower(0);
+                /*wait*/ waitTime(1300);
+                depositUp(1);
+                /*wait*/ waitTrajDone();
+                setServoPos(LOCKFRONT, lockFU);
+                setServoPos(LOCKBACK, lockBU);
+
+                followTraj(14); //park
+                /*wait*/ waitTime(200);
+                depositDown();
                 break;
             case 2:
-                followTraj(21);
-                break;
-        }
-        waitTrajDone();
+                followTraj(21); //ppp
+                /*wait*/ waitTrajDone();
+                setServoPos(INTAKE, intakeUp);
 
-        setServoPos(INTAKE, intakeUp);
+                followTraj(22); //stack+1
+                /*wait*/ waitTime(150);
+                setMotorPower(1);
+                /*wait*/ waitTrajDone();
+                /*wait*/ waitTime(80);
+                checkIntaked();
+                setMotorPower(-1);
 
-        // Trajectory 2
-        switch (PROPLOCATION_N){
-            case 0:
-                followTraj(2);
-                break;
-            case 1:
-                followTraj(12);
-                break;
-            case 2:
-                followTraj(22);
-                break;
-        }
-        waitTime(600);
-        setMotorPower(1);
-        waitTrajDone();
-        waitTime(80);
-        checkIntaked();
-        setMotorPower(-1);
+                followTraj(23); //to backdrop
+                /*wait*/ waitTime(500);
+                setMotorPower(0);
+                /*wait*/ waitTime(1300);
+                depositUp(1);
+                /*wait*/ waitTrajDone();
+                setServoPos(LOCKFRONT, lockFU);
+                setServoPos(LOCKBACK, lockBU);
 
-        // Trajectory 3
-        switch (PROPLOCATION_N){
-            case 0:
-                followTraj(3);
-                break;
-            case 1:
-                followTraj(13);
-                break;
-            case 2:
-                followTraj(23);
-                break;
-        }
-        waitTrajDone();
-        setMotorPower(0);
-
-        // Trajectory 4
-        switch (PROPLOCATION_N){
-            case 0:
-                followTraj(4);
-                break;
-            case 1:
-                followTraj(14);
-                break;
-            case 2:
-                followTraj(24);
-                break;
-        }
-
-        setMotorTarget(VLIFT, targetMed - 70);
-        waitTime(500);
-        setServoPos(VPITCH, vPitchDeposit);
-        waitTime(500);
-        setServoPos(PIVOT, pivotScore);
-        setMotorTarget(VLIFT, 300);
-
-        // Trajectory 5
-        switch (PROPLOCATION_N){
-            case 0:
-                followTraj(5);
-                break;
-            case 1:
-                followTraj(15);
-                break;
-            case 2:
-                followTraj(25);
-                break;
-        }
-        waitTrajDone();
-        setServoPos(LOCKFRONT, lockFU);
-        setServoPos(LOCKBACK, lockBU);
-
-        // Trajectory 6
-        switch (PROPLOCATION_N){
-            case 0:
-                followTraj(6);
-                break;
-            case 1:
-                followTraj(16);
-                break;
-            case 2:
-                followTraj(26);
-                break;
-        }
-        waitTime(1000); // adjust for when the robot is far enough away from the backdrop
-
-        setMotorTarget(VLIFT, 600);
-        waitTime(200);
-        setServoPos(LOCKFRONT, lockFD);
-        setServoPos(LOCKBACK, lockBD);
-        setServoPos(PIVOT, pivotHome);
-        waitTime(400);
-        setServoPos(VPITCH, vPitchIntake);
-        waitTime(800);
-        setMotorTarget(VLIFT, -10);
-
-        // Trajectory 7
-        switch (PROPLOCATION_N){
-            case 0:
-                followTraj(7);
-                break;
-            case 1:
-                followTraj(17);
-                break;
-            case 2:
-                followTraj(27 );
+                followTraj(24); //park
+                /*wait*/ waitTime(200);
+                depositDown();
                 break;
         }
     }
