@@ -902,7 +902,7 @@ public class BACKBlue_4 extends OpMode {
                 setServoPos(INTAKE, intakeUp);
                 depositUp(1);
 
-                followTraj(12); //yellow
+                followTraj(102); //yellow
                 /*wait*/
                 waitTrajDone();
                 setServoPos(LOCKFRONT, lockFU);
