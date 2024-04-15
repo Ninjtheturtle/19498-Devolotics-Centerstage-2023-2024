@@ -152,7 +152,7 @@ public class WINGRed_3 extends OpMode {
     // TensorFlow Object Detection
     private static final boolean USE_WEBCAM = true;
     private static final String TFOD_MODEL_ASSET = "redpropv1.tflite";
-    private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/bluepropv1.tflite";
+    private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/redpropv1.tflite";
     private static final String[] LABELS = {
             "RED",
     };

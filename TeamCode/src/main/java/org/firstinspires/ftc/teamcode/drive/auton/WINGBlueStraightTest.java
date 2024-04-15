@@ -327,7 +327,7 @@ public class WINGBlueStraightTest extends OpMode {
                 .lineToLinearHeading(new Pose2d(-58, 37, Math.toRadians(180)))
                 .build();
 
-        traj_left3 = drive.trajectoryBuilder(traj_left102.end(), true)
+        traj_left3 = drive.trajectoryBuilder(traj_left2.end(), true)
                 .lineToConstantHeading(new Vector2d(-50, 57))
                 .build();
 
@@ -335,7 +335,7 @@ public class WINGBlueStraightTest extends OpMode {
                 .lineToConstantHeading(new Vector2d(30, 57))
                 .build();
 
-        traj_left5 = drive.trajectoryBuilder(traj_left104.end(), true)
+        traj_left5 = drive.trajectoryBuilder(traj_left4.end(), true)
                 .lineToConstantHeading(new Vector2d(48, 37))
                 .build();
 
@@ -815,15 +815,25 @@ public class WINGBlueStraightTest extends OpMode {
         switch (PROPLOCATION_N) {
             case 0:
                 followTraj(1);
+                waitTrajDone();
                 followTraj(2);
+                waitTrajDone();
                 followTraj(3);
+                waitTrajDone();
                 followTraj(4);
+                waitTrajDone();
                 followTraj(5);
+                waitTrajDone();
                 followTraj(6);
+                waitTrajDone();
                 followTraj(7);
+                waitTrajDone();
                 followTraj(8);
+                waitTrajDone();
                 followTraj(9);
+                waitTrajDone();
                 followTraj(10);
+                waitTrajDone();
                 break;
         }
     }
