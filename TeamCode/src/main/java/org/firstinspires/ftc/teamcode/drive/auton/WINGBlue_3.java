@@ -64,7 +64,7 @@ public class WINGBlue_3 extends OpMode {
     int lockBD = 250;
 
     int pivotHome = 130;
-    int pivotScore = 840;
+    int pivotScore = 900;
 
     int pivotPos = pivotHome;
 

@@ -11,7 +11,7 @@ public class Values {
 
     // PIVOT SERVO POSITIONS
     public static final double pivotHome = 0.13;
-    public static final double pivotScore = 0.84;
+    public static final double pivotScore = 0.9;
 
     // LOCKING SERVO POSITIONS
     public static final double lockUpFront = 0;
