@@ -24,104 +24,60 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 //@Config
 public class TeleOpRed extends OpMode
 {
-    //HARDWARE
+    // HARDWARE
     private SampleMecanumDrive drive;
-    private Servo intakeL, intakeR, lockFront, lockBack, vPitchL, vPitchR, launch, pivot;
+    private Servo intakeL, intakeR, lockFront, lockBack, vPitchL, vPitchR, launch, pivot, hangL, hangR;
     private DcMotorEx liftL, liftR, intake, hang;
-    DistanceSensor sensorL, sensorR, senseLF, senseLB;
+    private DistanceSensor senseLF, senseLB;
 
-    //Region Other
+    // Region Other
     private String autoProcess = "none";
     int autoState = 0;
     boolean pHome = false;
     boolean pHigh = false;
     boolean pMed = false;
     boolean pLow = false;
-    boolean pDetected = false;
 
     int resetState = 0;
     boolean pReset = false;
     double resetStartTime = 0;
 
-    //Runtime Vars
+    // RUNTIME VARIABLES
     private ElapsedTime runtime = new ElapsedTime();
     private ElapsedTime totalTime = new ElapsedTime();
     private ElapsedTime senseTime = new ElapsedTime();
 
-    //Drive Speed
-    double driveSpeed = 1;
-    double turnSpeed = 1;
+    // SETTING SERVO POSITIONS
+    double intakePos = Values.intakeDown;
+    double vPitchPos = Values.vPitchIntake;
+    double pivotPos = Values.pivotHome;
 
-    //Backdrop Sensors
-    boolean nearBack, nearRight, nearLeft = false;
-    int state = 0;
-    int backDistanceThreshold = 25;
-
-    //vPitch servo positions
-    double vPitchIntake = 0.91;
-    double vPitchDeposit = 0.04;
-
-    //intake servo positions
-    double intakeDown = 0.45;
-    double intakeUp = 0.12;
-
-    //locking servo positions
-    double lockUpFront = 0;
-    double lockDownFront = 0.25;
-
-    double lockDownBack = 0.25;
-    double lockUpBack = 0;
-
-    //pivot servo positions
-    double pivotHome = 0.13;
-    double pivotScore = 0.84;
-
-    //Setting servo variables
-    double intakePos = intakeDown;
-    double vPitchPos = vPitchIntake;
-    double pivotPos = pivotHome;
-    double lockAngleFront = 0;
-    double lockAngleBack = 0;
-
-    double intakeKickOut = 0;
-    double kickoutSpeed = -1;
-
-    double hangFeed = 0.4;
-    boolean isHang = false;
-
-    int turing = 1;
-
-    //region PIDS
+    // SLIDE PIDS
     int vTarget = 0;
     public PIDController vController;
-    public double Pv = 0.010877, Iv = 0, Dv = 0.00006, Fv = 0;
+    public double Pv = Values.Pv, Iv = Values.Iv, Dv = Values.Dv, Fv = Values.Fv;
 
     public PIDController vControllerR;
-    public double Pvr = 0.010877, Ivr = 0, Dvr = 0.00006, Fvr = 0;
+    public double Pvr = Values.Pv, Ivr = Values.Iv, Dvr = Values.Dv, Fvr = Values.Fv;
 
-    int vMin = 0;
-    int vIntake = 40;
-    int vTargetInter = 70;
-    int targetLow = 500;
-    int targetMed = 600;
-    int targetHigh = 700;
-    int vMax = 1300;
-
-    double launched = 0.2;
-
+    // STATES
+    double driveSpeed = 1;
+    double turnSpeed = 1;
     double motorPowerLeft;
     double motorPowerRight;
-
     int autoLayer = 300;
     boolean fIn = false;
     boolean bIn = false;
-
     double prevTime = 0;
     double prevTimeTelemetry = 0;
-    //Locking
-    boolean prevLockingFront = false, prevLockingBack = false, prevIntakePitch = false, prevHanging = false, prevDetected = false, prevAutoUp = false, prevAutoDown;
-    boolean isLockedFront = false, isLockedBack = false, isIntakePitch = true, isHanging = true, isDetected = true, isAutoUp = true, isAutoDown = true;
-
+    boolean prevLockingFront = false,
+            prevLockingBack = false,
+            prevDetected = false,
+            prevAutoUp = false,
+            prevAutoDown,
+            isLockedFront = false,
+            isLockedBack = false,
+            isDetected = true;
 
     @Override
     public void init() {
@@ -151,6 +107,11 @@ public class TeleOpRed extends OpMode
         vPitchR.setDirection(Servo.Direction.REVERSE);
 
         launch = hardwareMap.get(Servo.class, "s4");
+
+        hangL = hardwareMap.get(Servo.class, "s15");
+        hangL.setDirection(Servo.Direction.FORWARD);
+        hangR = hardwareMap.get(Servo.class, "s5");
+        hangR.setDirection(Servo.Direction.REVERSE);
 
         pivot = hardwareMap.get(Servo.class, "s12");
         pivot.setDirection(Servo.Direction.REVERSE);
@@ -183,37 +144,38 @@ public class TeleOpRed extends OpMode
 
         // Retrieve the IMU from the hardware map
         IMU imu = hardwareMap.get(IMU.class, "imu");
-        // Adjust the orientation parameters to match your robot
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD,
                 RevHubOrientationOnRobot.UsbFacingDirection.UP));
-        // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
         imu.initialize(parameters);
 
         launch.setPosition(0);
+        hangL.setPosition(0);
+        hangR.setPosition(0);
     }
 
+    @Override
     public void start() {
         totalTime.reset();
     }
 
     @Override
     public void loop() {
-        // Endgame started
+        /////////////// TIMERS \\\\\\\\\\\\\
+        // Endgame Started
         if (totalTime.seconds() > 90 && totalTime.seconds() < 91) {
             gamepad1.rumble(200);
             gamepad2.rumble(200);
         }
 
-        // Game ended
+        // Game Ended
         if (totalTime.seconds() > 115 && totalTime.seconds() < 116) {
             gamepad1.rumble(200);
             gamepad2.rumble(200);
         }
 
-        // Controller vibrate when both pixels are inside
+        /////////////// DEPOSIT PIXEL CHECKING \\\\\\\\\\\\\
         bIn = !(senseLB.getDistance(DistanceUnit.MM) > 30);
-
         fIn = !(senseLF.getDistance(DistanceUnit.MM) > 30);
 
         boolean detected = bIn && fIn;
@@ -228,13 +190,16 @@ public class TeleOpRed extends OpMode
             gamepad2.rumble(200);
         }
 
-        // PID Stuff
-//        vController.setPID(Pv, Iv, Dv); //comment out after done tuning
+        /////////////// SLIDES PID SECTION \\\\\\\\\\\\\
         int vPosition = liftL.getCurrentPosition();
         double vPID = vController.calculate(vPosition, vTarget);
-//        vControllerR.setPID(Pvr, Ivr, Dvr); //comment out after done tuning
+
         int vPositionR = liftR.getCurrentPosition();
         double vPIDR = vControllerR.calculate(vPositionR, vTarget);
+
+//        vController.setPID(Pv, Iv, Dv); // FOR TUNING
+//        vControllerR.setPID(Pvr, Ivr, Dvr); // FOR TUNING
+
         motorPowerLeft = vPID + Fv;
         motorPowerRight = vPIDR + Fvr;
         motorPowerLeft = Math.min(1, Math.max(-0.6, motorPowerLeft));
@@ -242,7 +207,7 @@ public class TeleOpRed extends OpMode
         liftL.setPower(motorPowerLeft);
         liftR.setPower(motorPowerRight);
 
-//        Pose2d poseEstimate = new Pose2d(Math.toRadians(90));
+        /////////////// DRIVE SECTION (FIELD ECCENTRIC) \\\\\\\\\\\\\
         Pose2d poseEstimate = drive.getPoseEstimate();
 
         // Create a vector from the gamepad x/y inputs
@@ -262,84 +227,90 @@ public class TeleOpRed extends OpMode
                 )
         );
 
-        // Update everything. Odometry. Etc.
         drive.update();
 
-//        Throttle turning speed with gamepad 2
+        /////////////// DRIVER CONTROL GP2 \\\\\\\\\\\\\
+        // SPEED THROTTLE
         if (gamepad2.a) {
             turnSpeed = 0.2;
         } else {
             turnSpeed = 1;
         }
 
-        //Hanging button
-        boolean hanging = gamepad2.x;
-        if (hanging && !prevHanging) {
-            isHanging = !isHanging;
-        }
-        if (isHanging) {
-            hang.setPower(gamepad2.right_trigger - gamepad2.left_trigger);
-        } else {
-            hang.setPower(hangFeed + gamepad2.right_trigger - gamepad2.left_trigger);
-        }
-        prevHanging = hanging;
-
-        //vTarget Up Down
-        if (gamepad1.right_bumper) {
-            vTarget += 30;
-        } else if (gamepad1.left_bumper) {
-            vTarget -= 15;
-        }
-        //vTarget Max Min
-        vTarget = Math.min(vMax, Math.max(-15, vTarget));
-
-        //setting Servo Positions
-        vPitchL.setPosition(vPitchPos);
-        vPitchR.setPosition(vPitchPos - 0.02);
-
-        //Intake
-        intake.setPower(1 * ((gamepad1.left_trigger - gamepad1.right_trigger) + intakeKickOut));
-
-        //Auto Up
+        // SLIDES AUTO POSITION CONTROL
+        // higher up
         boolean autoUp = gamepad2.dpad_up;
         if (autoUp && !prevAutoUp) {
             autoLayer += 100;
         }
         prevAutoUp = autoUp;
 
-        //Auto Down
+        // lower down
         boolean autoDown = gamepad2.dpad_down;
         if (autoDown && !prevAutoDown) {
             autoLayer -= 100;
         }
         prevAutoDown = autoDown;
 
-        autoLayer = Math.min(vMax, Math.max(300, autoLayer));
+        // DRONE CONTROL
+        if (gamepad2.y) {
+            launch.setPosition(Values.launchReleased);
+        }
 
-        //Locking Left
+        // HANG UNLEASH
+        if (gamepad2.x) {
+            hangL.setPosition(0.4);
+            hangR.setPosition(0.4);
+        }
+
+
+        autoLayer = Math.min(Values.vMax, Math.max(300, autoLayer));
+
+        /////////////// DRIVER CONTROL GP1 \\\\\\\\\\\\\
+        // SLIDES MOVEMENT (UP AND DOWN)
+        if (gamepad1.right_bumper) {
+            vTarget += 30;
+        } else if (gamepad1.left_bumper) {
+            vTarget -= 15;
+        }
+
+        // slides positioning
+        vTarget = Math.min(Values.vMax, Math.max(-15, vTarget));
+
+        // INTAKE CONTROL
+        intake.setPower(1 * ((gamepad1.left_trigger - gamepad1.right_trigger) + Values.intakeKickOut));
+
+        // SETTING SERVO POSITION
+        vPitchL.setPosition(vPitchPos);
+        vPitchR.setPosition(vPitchPos - 0.02);
+
+        // DEPOSIT LOCK CONTROLS
+        // left
         boolean lockingFront = gamepad1.dpad_left;
         if (lockingFront && !prevLockingFront) {
             isLockedFront = !isLockedFront;
         }
         if (isLockedFront) {
-            lockFront.setPosition(lockUpFront);
+            lockFront.setPosition(Values.lockUpFront);
         } else {
-            lockFront.setPosition(lockDownFront);
+            lockFront.setPosition(Values.lockDownFront);
         }
         prevLockingFront = lockingFront;
 
-        //Locking Right
+        // right
         boolean lockingBack = gamepad1.dpad_right;
         if (lockingBack && !prevLockingBack) {
             isLockedBack = !isLockedBack;
         }
         if (isLockedBack) {
-            lockBack.setPosition(lockUpBack);
+            lockBack.setPosition(Values.lockUpBack);
         } else {
-            lockBack.setPosition(lockDownBack);
+            lockBack.setPosition(Values.lockDownBack);
         }
         prevLockingBack = lockingBack;
 
+        // INTAKE POSITION CONTROL
+        // manual control
         if (gamepad1.dpad_up) {
             intakePos += 0.05;
         }
@@ -347,26 +318,22 @@ public class TeleOpRed extends OpMode
             intakePos -= 0.05;
         }
 
+        // auto set position
         if (gamepad1.dpad_up && gamepad1.right_trigger != 0) {
-            intakePos = intakeUp;
+            intakePos = Values.intakeUp;
         }
         if (gamepad1.dpad_down && gamepad1.right_trigger != 0) {
-            intakePos = intakeDown;
+            intakePos = Values.intakeDown;
         }
 
-        intakePos = Math.min(intakeDown, Math.max(intakeUp, intakePos));
+        intakePos = Math.min(Values.intakeDown, Math.max(Values.intakeUp, intakePos));
         intakeL.setPosition(intakePos - 0.02);
         intakeR.setPosition(intakePos);
 
-        //Pivot Servo Control
+        // DEPOSIT PIVOT CONTROL
         pivot.setPosition(pivotPos);
 
-        //Drone Launch
-        if (gamepad2.y) {
-            launch.setPosition(launched);
-        }
-
-        //region controls
+        // REGION CONTROLS (FINITE STATE MACHINE)
         boolean low = gamepad1.left_stick_button;
         boolean med = gamepad1.a;
         boolean high = gamepad1.y;
@@ -414,20 +381,19 @@ public class TeleOpRed extends OpMode
                         break;
                 }
                 break;
-
             case "med":
                 switch (autoState) {
                     case 0:
-                        vTarget = targetMed;
+                        vTarget = Values.targetMed;
                         runtime.reset();
                         autoState += 1;
                         break;
                     case 1:
                         if (runtime.milliseconds() > 200) {
-                            vPitchPos = vPitchDeposit;
+                            vPitchPos = Values.vPitchDeposit;
                         }
                         if (runtime.milliseconds() > 200 + 40) {
-                            pivotPos = pivotScore;
+                            pivotPos = Values.pivotScore;
                         }
                         if (runtime.milliseconds() > 200 + 40 + 100) {
                             vTarget = autoLayer;
@@ -446,7 +412,7 @@ public class TeleOpRed extends OpMode
                         break;
                     case 3:
                         if (med && !pMed) {
-                            pivotPos = pivotHome;
+                            pivotPos = Values.pivotHome;
                             isLockedFront = false;
                             isLockedBack = false;
                             runtime.reset();
@@ -455,12 +421,12 @@ public class TeleOpRed extends OpMode
                         break;
                     case 4:
                         if (runtime.milliseconds() > 40 && vTarget >= 600) {
-                            vPitchPos = vPitchIntake;
+                            vPitchPos = Values.vPitchIntake;
                         }
                         if (runtime.milliseconds() > 0 && vTarget < 600) {
                             vTarget = 600;
                             if (runtime.milliseconds() > 40 + 100) {
-                                vPitchPos = vPitchIntake;
+                                vPitchPos = Values.vPitchIntake;
                             }
                         }
                         if (runtime.milliseconds() > 60 + 400) {
@@ -474,14 +440,14 @@ public class TeleOpRed extends OpMode
                             vTarget = -30;
                         }
                         if (runtime.milliseconds() > 1000) {
-                            //reset all encoder positions
+                            // reset all encoder positions
                             liftL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                             liftL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                             liftR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                             liftR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                            //set encoder to the home position
+                            // set encoder to the home position
                             vTarget = 0;
-                            //reset the state to none
+                            // reset the state to none
                             runtime.reset();
                             autoState = 0;
                             autoProcess = "none";
@@ -496,18 +462,17 @@ public class TeleOpRed extends OpMode
         pMed = med;
         pHigh = high;
 
-        //Display Telemetry
+        /////////////// TELEMETRY \\\\\\\\\\\\\\\
         double overallTime;
-        overallTime = totalTime.milliseconds() - prevTime;
         prevTime = totalTime.milliseconds();
+        overallTime = totalTime.milliseconds() - prevTime;
 
-        if (totalTime.milliseconds() - prevTimeTelemetry > 500) {
+        if (overallTime > 500) {
             telemetry.addData("Deposit Layer", autoLayer);
             telemetry.addData("Intake Position", intakePos);
             telemetry.addData("vPitchPos", vPitchPos);
             telemetry.addData("vPosition", liftL.getCurrentPosition());
             telemetry.addData("vTarget", vTarget);
-            telemetry.addData("state", state);
             telemetry.addData("driveSpeed", driveSpeed);
             telemetry.addData("turnSpeed", turnSpeed);
             telemetry.update();
