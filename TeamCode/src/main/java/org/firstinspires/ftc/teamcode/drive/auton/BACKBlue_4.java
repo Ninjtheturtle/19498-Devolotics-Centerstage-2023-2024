@@ -365,7 +365,7 @@ public class BACKBlue_4 extends OpMode {
 
         // Prop in the middle
         traj_middle1 = drive.trajectoryBuilder(START_POSE)
-                .lineToLinearHeading(new Pose2d(26, 28, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(26, 27, Math.toRadians(180)))
                 .build(); // spike mark
 
         traj_middle2 = drive.trajectoryBuilder(traj_middle1.end())
@@ -792,7 +792,7 @@ public class BACKBlue_4 extends OpMode {
             case 0: //left
                 followTraj(1); //ppp and yellow
                 /*wait*/
-                waitTime(300);
+                waitTime(360);
                 setServoPos(INTAKE, intakeUp);
                 //deposit up 1
                 setMotorTarget(VLIFT, targetMed - 70); //slides up

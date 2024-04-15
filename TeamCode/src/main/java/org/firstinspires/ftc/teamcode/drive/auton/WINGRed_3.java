@@ -150,9 +150,9 @@ public class WINGRed_3 extends OpMode {
     // TensorFlow Object Detection
     private static final boolean USE_WEBCAM = true;
     private static final String TFOD_MODEL_ASSET = "redpropv1.tflite";
-    private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/bluepropv1.tflite";
+    private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/redpropv1.tflite";
     private static final String[] LABELS = {
-            "BLUE",
+            "RED",
     };
     private TfodProcessor tfod;
     private VisionPortal visionPortal;
@@ -316,43 +316,43 @@ public class WINGRed_3 extends OpMode {
         drive.setPoseEstimate(START_POSE);
 
         // Prop on the left
-        double leftTruss1 = -58;
-        double leftTruss2 = -60;
-        double leftTruss3 = -60;
+        double rightTruss1 = -58;
+        double rightTruss2 = -60;
+        double rightTruss3 = -60;
 
-        traj_left1 = drive.trajectoryBuilder(START_POSE)
+        traj_right1 = drive.trajectoryBuilder(START_POSE)
                 .splineTo(new Vector2d(-33.5, -37), Math.toRadians(-320))
                 .build(); // spike mark
 
-        traj_left2 = drive.trajectoryBuilder(traj_left1.end())
+        traj_right2 = drive.trajectoryBuilder(traj_right1.end())
                 .lineToLinearHeading(new Pose2d(-60, -37, Math.toRadians(-180)))
                 .build(); // align stack+1
 
-        traj_left3 = drive.trajectoryBuilder(traj_left2.end(), true)
-                .lineToConstantHeading(new Vector2d(-50, leftTruss1))
-                .splineToConstantHeading(new Vector2d(-38, leftTruss1), Math.toRadians(0))
-                .lineToConstantHeading(new Vector2d(20, leftTruss1))
-                .splineToConstantHeading(new Vector2d(midX(20, 49.5), midY(leftTruss1, -38)), lineDirection(20, leftTruss1,49.5,-38))
-                .lineToConstantHeading(new Vector2d(49.5, -38))
+        traj_right3 = drive.trajectoryBuilder(traj_right2.end(), true)
+                .lineToConstantHeading(new Vector2d(-50, rightTruss1))
+                .splineToConstantHeading(new Vector2d(-38, rightTruss1), Math.toRadians(0))
+                .lineToConstantHeading(new Vector2d(20, rightTruss1))
+                .splineToConstantHeading(new Vector2d(midX(20, 49.5), midY(rightTruss1, -34)), lineDirection(20, rightTruss1,49.5,-34))
+                .lineToConstantHeading(new Vector2d(49.5, -34))
                 .build(); // backdrop
 
-        traj_left4 = drive.trajectoryBuilder(traj_left3.end())
-                .lineToConstantHeading(new Vector2d(midX(46,30), midY(-33,leftTruss2)))
-                .splineToConstantHeading(new Vector2d(30, leftTruss2), Math.toRadians(180))
-                .lineToConstantHeading(new Vector2d(-38, leftTruss2))
-                .splineToConstantHeading(new Vector2d(midX(-38, -60), midY(leftTruss2, -37)), lineDirection(-38, leftTruss2, -60, -37))
+        traj_right4 = drive.trajectoryBuilder(traj_right3.end())
+                .lineToConstantHeading(new Vector2d(midX(46,30), midY(-33,rightTruss2)))
+                .splineToConstantHeading(new Vector2d(30, rightTruss2), Math.toRadians(180))
+                .lineToConstantHeading(new Vector2d(-38, rightTruss2))
+                .splineToConstantHeading(new Vector2d(midX(-38, -60), midY(rightTruss2, -37)), lineDirection(-38, rightTruss2, -60, -37))
                 .lineToConstantHeading(new Vector2d(-60, -37))
                 .build(); // stack+2
 
-        traj_left5 = drive.trajectoryBuilder(traj_left4.end(), true)
-                .lineToConstantHeading(new Vector2d(-50, leftTruss3))
-                .splineToConstantHeading(new Vector2d(-38, leftTruss3), Math.toRadians(0))
-                .lineToConstantHeading(new Vector2d(20, leftTruss3))
-                .splineToConstantHeading(new Vector2d(midX(20,49), midY(leftTruss3,-37)), lineDirection(20,leftTruss3,49,-37))
+        traj_right5 = drive.trajectoryBuilder(traj_right4.end(), true)
+                .lineToConstantHeading(new Vector2d(-50, rightTruss3))
+                .splineToConstantHeading(new Vector2d(-38, rightTruss3), Math.toRadians(0))
+                .lineToConstantHeading(new Vector2d(20, rightTruss3))
+                .splineToConstantHeading(new Vector2d(midX(20,49), midY(rightTruss3,-37)), lineDirection(20,rightTruss3,49,-37))
                 .lineToConstantHeading(new Vector2d(49, -37))
                 .build(); // backdrop
 
-        traj_left6 = drive.trajectoryBuilder(traj_left5.end())
+        traj_right6 = drive.trajectoryBuilder(traj_right5.end())
                 //.splineToConstantHeading(new Vector2d(56, 64), Math.toRadians(330))
                 .lineToConstantHeading(new Vector2d(42, -64))
                 .build(); //park
@@ -364,7 +364,7 @@ public class WINGRed_3 extends OpMode {
 
         traj_middle1 = drive.trajectoryBuilder(START_POSE)
                 .lineToLinearHeading(new Pose2d(-40, -38, Math.toRadians(-270)))
-                .splineToConstantHeading(new Vector2d(-36, -40), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(-36, -44), Math.toRadians(180))
                 .build(); // spike mark
 
         traj_middle2 = drive.trajectoryBuilder(traj_middle1.end())
@@ -401,44 +401,44 @@ public class WINGRed_3 extends OpMode {
                 .build(); //park
 
         // Prop on the right
-        double rightTruss1 = -59;
-        double rightTruss2 = -60;
-        double rightTruss3 = -61;
+        double leftTruss1 = -59;
+        double leftTruss2 = -60;
+        double leftTruss3 = -61;
 
-        traj_right1 = drive.trajectoryBuilder(START_POSE)
+        traj_left1 = drive.trajectoryBuilder(START_POSE)
                 .lineToLinearHeading(new Pose2d(-40, -25, Math.toRadians(180)))
                 .build(); // spike mark
 
-        traj_right2 = drive.trajectoryBuilder(traj_right1.end())
+        traj_left2 = drive.trajectoryBuilder(traj_left1.end())
                 .lineToConstantHeading(new Vector2d(-40, -38))
                 .splineToLinearHeading(new Pose2d(-61, -37, Math.toRadians(180)), Math.toRadians(180))
                 .build(); // stack+1
 
-        traj_right3 = drive.trajectoryBuilder(traj_right2.end(), true)
-                .lineToConstantHeading(new Vector2d(-50, rightTruss1))
-                .splineToConstantHeading(new Vector2d(-38, rightTruss1), Math.toRadians(0))
-                .lineToConstantHeading(new Vector2d(20, rightTruss1))
-                .splineToConstantHeading(new Vector2d(midX(20, 50.5), midY(rightTruss1, -30.5)), lineDirection(20, rightTruss1,50.5,-30.5))
+        traj_left3 = drive.trajectoryBuilder(traj_left2.end(), true)
+                .lineToConstantHeading(new Vector2d(-50, leftTruss1))
+                .splineToConstantHeading(new Vector2d(-38, leftTruss1), Math.toRadians(0))
+                .lineToConstantHeading(new Vector2d(20, leftTruss1))
+                .splineToConstantHeading(new Vector2d(midX(20, 50.5), midY(leftTruss1, -30.5)), lineDirection(20, leftTruss1,50.5,-30.5))
                 .lineToConstantHeading(new Vector2d(50.5, -30.5))
                 .build(); // backdrop
 
-        traj_right4 = drive.trajectoryBuilder(traj_right3.end())
-                .lineToConstantHeading(new Vector2d(midX(46,30), midY(-33,rightTruss2)))
-                .splineToConstantHeading(new Vector2d(30, rightTruss2), Math.toRadians(180))
-                .lineToConstantHeading(new Vector2d(-38, rightTruss2))
-                .splineToConstantHeading(new Vector2d(midX(-38, -61), midY(rightTruss2, -37)), lineDirection(-38, rightTruss2, -61, -37))
+        traj_left4 = drive.trajectoryBuilder(traj_left3.end())
+                .lineToConstantHeading(new Vector2d(midX(46,30), midY(-33,leftTruss2)))
+                .splineToConstantHeading(new Vector2d(30, leftTruss2), Math.toRadians(180))
+                .lineToConstantHeading(new Vector2d(-38, leftTruss2))
+                .splineToConstantHeading(new Vector2d(midX(-38, -61), midY(leftTruss2, -37)), lineDirection(-38, leftTruss2, -61, -37))
                 .lineToConstantHeading(new Vector2d(-61, -37))
                 .build(); // stack+2
 
-        traj_right5 = drive.trajectoryBuilder(traj_right4.end(), true)
-                .lineToConstantHeading(new Vector2d(-50, rightTruss3))
-                .splineToConstantHeading(new Vector2d(-38, rightTruss3), Math.toRadians(0))
-                .lineToConstantHeading(new Vector2d(20, rightTruss3))
-                .splineToConstantHeading(new Vector2d(midX(20,49), midY(rightTruss3,-38)), lineDirection(20,rightTruss3,49,-38))
+        traj_left5 = drive.trajectoryBuilder(traj_left4.end(), true)
+                .lineToConstantHeading(new Vector2d(-50, leftTruss3))
+                .splineToConstantHeading(new Vector2d(-38, leftTruss3), Math.toRadians(0))
+                .lineToConstantHeading(new Vector2d(20, leftTruss3))
+                .splineToConstantHeading(new Vector2d(midX(20,49), midY(leftTruss3,-38)), lineDirection(20,leftTruss3,49,-38))
                 .lineToConstantHeading(new Vector2d(49, -38))
                 .build(); // backdrop
 
-        traj_right6 = drive.trajectoryBuilder(traj_right5.end())
+        traj_left6 = drive.trajectoryBuilder(traj_left5.end())
                 //.splineToConstantHeading(new Vector2d(56, 64), Math.toRadians(330))
                 .lineToConstantHeading(new Vector2d(42, -64))
                 .build(); //park
@@ -855,7 +855,7 @@ public class WINGRed_3 extends OpMode {
                 break;
             case 1:
                 followTraj(11); //ppp
-                /*wait*/ waitTime(540);
+                /*wait*/ waitTime(630);
                 setServoPos(INTAKE, intakeUp);
                 waitTrajDone();
 
