@@ -822,13 +822,8 @@ public class WINGRed_3 extends OpMode {
 
     public void checkIntaked(int numStack) {PROGRAM.add(new int[] {8, numStack, 0, 0});}
 
-    public void depositUp(int rowNum) {
-        PROGRAM.add(new int[]{11, rowNum, 0, 0});
-    }
-
-    public void depositDown() {
-        PROGRAM.add(new int[]{12, 0, 0, 0});
-    }
+    public void depositDown() {PROGRAM.add(new int[] {11, 0, 0, 0});}
+    public void depositUp(int rowNum) {PROGRAM.add(new int[] {12, rowNum, 0, 0});}
 
     public void buildProgram() {
         setServoPos(INTAKE, intakeDown);

@@ -324,7 +324,7 @@ public class WINGBlue_3 extends OpMode {
                 .build(); // spike mark
 
         traj_left2 = drive.trajectoryBuilder(traj_left1.end())
-                .lineToLinearHeading(new Pose2d(-58, 37, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(-57, 37, Math.toRadians(180)))
                 .build(); // align stack+1
 
         traj_left102 = drive.trajectoryBuilder(traj_left2.end())
@@ -807,8 +807,8 @@ public class WINGBlue_3 extends OpMode {
     public void setMotorPower(int power) {PROGRAM.add(new int[] {69, power, 0, 0});}
 
     public void checkIntaked(int numStack) {PROGRAM.add(new int[] {8, numStack, 0, 0});}
-    public void depositUp(int rowNum) {PROGRAM.add(new int[] {11, rowNum, 0, 0});}
-    public void depositDown() {PROGRAM.add(new int[] {12, 0, 0, 0});}
+    public void depositDown() {PROGRAM.add(new int[] {11, 0, 0, 0});}
+    public void depositUp(int rowNum) {PROGRAM.add(new int[] {12, rowNum, 0, 0});}
 
     public void buildProgram() {
         setServoPos(INTAKE, intakeDown);
