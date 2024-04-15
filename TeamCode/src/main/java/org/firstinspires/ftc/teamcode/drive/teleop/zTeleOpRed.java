@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 @TeleOp
 //@Config
-public class TeleOpBlue extends OpMode
+public class zTeleOpRed extends OpMode
 {
     //HARDWARE
     private SampleMecanumDrive drive;
@@ -257,7 +257,7 @@ public class TeleOpBlue extends OpMode
         Vector2d input = new Vector2d(
                 driveSpeed * -gamepad1.left_stick_y,
                 driveSpeed * -gamepad1.left_stick_x
-        ).rotated(-poseEstimate.getHeading() + Math.toRadians(90));
+        ).rotated(-poseEstimate.getHeading() + Math.toRadians(270));
 
         // Pass in the rotated input + right stick value for rotation
         // Rotation is not part of the rotated input thus must be passed in separately
