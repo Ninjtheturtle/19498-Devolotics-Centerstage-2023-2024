@@ -7,7 +7,7 @@ public class Values {
 
     // INTAKE SERVO POSITIONS
     public static final double intakeDown = 0.45;
-    public static final double intakeUp = 0.12;
+    public static final double intakeUp = 0.1;
 
     // PIVOT SERVO POSITIONS
     public static final double pivotHome = 0.13;
