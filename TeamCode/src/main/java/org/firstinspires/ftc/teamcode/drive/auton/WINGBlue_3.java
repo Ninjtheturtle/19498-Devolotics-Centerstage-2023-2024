@@ -149,13 +149,14 @@ public class WINGBlue_3 extends OpMode {
 
     // TensorFlow Object Detection
     private static final boolean USE_WEBCAM = true;
-    private static final String TFOD_MODEL_ASSET = "redpropv1.tflite";
+    private static final String TFOD_MODEL_ASSET = "bluepropv1.tflite";
     private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/bluepropv1.tflite";
     private static final String[] LABELS = {
             "BLUE",
     };
     private TfodProcessor tfod;
     private VisionPortal visionPortal;
+
     public static double lineDirection(double startPointX, double startPointY, double endPointX, double endPointY){
         return Math.atan2(endPointY - startPointY, endPointX - startPointX);
     }
@@ -647,31 +648,30 @@ public class WINGBlue_3 extends OpMode {
                                     timer += 1;
                                     break;
                                 case 1:
-                                    //Check Intaked
-                                    if (timeout.milliseconds() < 100) { //if both aren't detected
-                                        intakePos = intakeUp + 80;
-                                    }
-                                    if (timeout.milliseconds() > 300 && timeout.milliseconds() < 700) { //if both aren't detected
-                                        intakePos = intakeUp - 40;
-                                    }
-                                    if (timeout.milliseconds() > 700 && timeout.milliseconds() < 1100) { //if both aren't detected
-                                        intakePos = intakeUp + 80;
-                                    }
-                                    if (timeout.milliseconds() > 1100 && timeout.milliseconds() < 1500) { //if both aren't detected
-                                        intakePos = intakeUp - 40;
-                                    }
-                                    if (timeout.milliseconds() > 1500 && timeout.milliseconds() < 1900) { //if both aren't detected
-                                        intakePos = intakeUp + 160;
-                                    }
-                                    if (timeout.milliseconds() > 2000) {
-                                        timer = 0;
-                                        CHANGE_LINE = true;
-                                    }
                                     if (detected) {
                                         timer = 0;
                                         CHANGE_LINE = true;
                                     }
-
+                                    //Check Intaked
+                                    if (timeout.milliseconds() < 100) { //if both aren't detected
+                                        intakePos = intakeUp + 80;
+                                    }
+                                    if (timeout.milliseconds() > 300 && timeout.milliseconds() < 500) { //if both aren't detected
+                                        intakePos = intakeUp - 40;
+                                    }
+                                    if (timeout.milliseconds() > 500 && timeout.milliseconds() < 900) { //if both aren't detected
+                                        intakePos = intakeUp + 80;
+                                    }
+                                    if (timeout.milliseconds() > 900 && timeout.milliseconds() < 1100) { //if both aren't detected
+                                        intakePos = intakeUp - 40;
+                                    }
+                                    if (timeout.milliseconds() > 1100 && timeout.milliseconds() < 1400) { //if both aren't detected
+                                        intakePos = intakeUp + 160;
+                                    }
+                                    if (timeout.milliseconds() > 1400) {
+                                        timer = 0;
+                                        CHANGE_LINE = true;
+                                    }
                                     break;
                             }
                             break;
@@ -682,31 +682,36 @@ public class WINGBlue_3 extends OpMode {
                                     timer += 1;
                                     break;
                                 case 1:
-                                    //Check Intaked
-                                    if (timeout.milliseconds() < 100) { //if both aren't detected
-                                        intakePos = intakeUp + 80;
-                                    }
-                                    if (timeout.milliseconds() > 300 && timeout.milliseconds() < 700) { //if both aren't detected
-                                        intakePos = intakeUp - 40;
-                                    }
-                                    if (timeout.milliseconds() > 700 && timeout.milliseconds() < 1100) { //if both aren't detected
-                                        intakePos = intakeUp + 160;
-                                    }
-                                    if (timeout.milliseconds() > 1100 && timeout.milliseconds() < 1500) { //if both aren't detected
-                                        intakePos = intakeUp - 40;
-                                    }
-                                    if (timeout.milliseconds() > 1500 && timeout.milliseconds() < 1900) { //if both aren't detected
-                                        intakePos = intakeUp + 240;
-                                    }
-                                    if (timeout.milliseconds() > 2000) {
-                                        timer = 0;
-                                        CHANGE_LINE = true;
-                                    }
                                     if (detected) {
                                         timer = 0;
                                         CHANGE_LINE = true;
                                     }
-
+                                    //Check Intaked
+                                    if (timeout.milliseconds() < 100) { //if both aren't detected
+                                        intakePos = intakeUp + 160;
+                                    }
+                                    if (timeout.milliseconds() > 300 && timeout.milliseconds() < 500) { //if both aren't detected
+                                        intakePos = intakeUp - 40;
+                                    }
+                                    if (timeout.milliseconds() > 500 && timeout.milliseconds() < 800) { //if both aren't detected
+                                        intakePos = intakeUp + 240;
+                                    }
+                                    if (timeout.milliseconds() > 800 && timeout.milliseconds() < 1000) { //if both aren't detected
+                                        intakePos = intakeUp - 40;
+                                    }
+                                    if (timeout.milliseconds() > 1000 && timeout.milliseconds() < 1300) { //if both aren't detected
+                                        intakePos = intakeUp + 320;
+                                    }
+                                    if (timeout.milliseconds() > 1300 && timeout.milliseconds() < 1500) { //if both aren't detected
+                                        intakePos = intakeUp - 40;
+                                    }
+                                    if (timeout.milliseconds() > 1500 && timeout.milliseconds() < 1800) { //if both aren't detected
+                                        intakePos = intakeUp + 400;
+                                    }
+                                    if (timeout.milliseconds() > 1800) {
+                                        timer = 0;
+                                        CHANGE_LINE = true;
+                                    }
                                     break;
                             }
                             break;
