@@ -796,9 +796,9 @@ public class WINGRed_3 extends OpMode {
                 checkIntaked(1);
 
                 followTraj(3); //to backdrop
-                /*wait*/ waitTime(200);
+                /*wait*/ waitTime(400);
                 setMotorPower(-1);
-                /*wait*/ waitTime(500);
+                /*wait*/ waitTime(300);
                 setMotorPower(0);
                 /*wait*/ waitTime(1500);
                 //deposit up 1
@@ -831,9 +831,9 @@ public class WINGRed_3 extends OpMode {
                 checkIntaked(2);
 
                 followTraj(5); //to backdrop
-                /*wait*/ waitTime(200);
+                /*wait*/ waitTime(400);
                 setMotorPower(-1);
-                /*wait*/ waitTime(500);
+                /*wait*/ waitTime(300);
                 setMotorPower(0);
                 /*wait*/ waitTime(1500);
                 //deposit up 2
@@ -875,9 +875,9 @@ public class WINGRed_3 extends OpMode {
                 checkIntaked(1);
 
                 followTraj(13); //to backdrop
-                /*wait*/ waitTime(200);
+                /*wait*/ waitTime(400);
                 setMotorPower(-1);
-                /*wait*/ waitTime(500);
+                /*wait*/ waitTime(300);
                 setMotorPower(0);
                 /*wait*/ waitTime(1500);
                 //deposit up 1
@@ -910,9 +910,9 @@ public class WINGRed_3 extends OpMode {
                 checkIntaked(2);
 
                 followTraj(15); //to backdrop
-                /*wait*/ waitTime(200);
+                /*wait*/ waitTime(400);
                 setMotorPower(-1);
-                /*wait*/ waitTime(500);
+                /*wait*/ waitTime(300);
                 setMotorPower(0);
                 /*wait*/ waitTime(1500);
                 //deposit up 2
@@ -953,9 +953,9 @@ public class WINGRed_3 extends OpMode {
                 checkIntaked(1);
 
                 followTraj(23); //to backdrop
-                /*wait*/ waitTime(200);
+                /*wait*/ waitTime(400);
                 setMotorPower(-1);
-                /*wait*/ waitTime(500);
+                /*wait*/ waitTime(300);
                 setMotorPower(0);
                 /*wait*/ waitTime(1500);
                 //deposit up 1
@@ -988,9 +988,9 @@ public class WINGRed_3 extends OpMode {
                 checkIntaked(2);
 
                 followTraj(25); //to backdrop
-                /*wait*/ waitTime(200);
+                /*wait*/ waitTime(400);
                 setMotorPower(-1);
-                /*wait*/ waitTime(500);
+                /*wait*/ waitTime(300);
                 setMotorPower(0);
                 /*wait*/ waitTime(1500);
                 //deposit up 2

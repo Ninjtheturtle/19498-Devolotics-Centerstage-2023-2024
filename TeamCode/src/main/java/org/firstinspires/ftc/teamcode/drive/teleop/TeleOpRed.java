@@ -78,6 +78,9 @@ public class TeleOpRed extends OpMode
             isLockedFront = false,
             isLockedBack = false,
             isDetected = true;
+    double offsetAngle = 270;
+
+//    public IMU imu;
 
     @Override
     public void init() {
@@ -142,12 +145,12 @@ public class TeleOpRed extends OpMode
         vController = new PIDController(Pv, Iv, Dv);
         vControllerR = new PIDController(Pvr, Ivr, Dvr);
 
-        // Retrieve the IMU from the hardware map
-        IMU imu = hardwareMap.get(IMU.class, "imu");
-        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD,
-                RevHubOrientationOnRobot.UsbFacingDirection.UP));
-        imu.initialize(parameters);
+//        // Retrieve the IMU from the hardware map
+//        imu = hardwareMap.get(IMU.class, "imu");
+//        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+//                RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD,
+//                RevHubOrientationOnRobot.UsbFacingDirection.UP));
+//        imu.initialize(parameters);
 
         launch.setPosition(0);
         hangL.setPosition(0);
@@ -215,7 +218,8 @@ public class TeleOpRed extends OpMode
         Vector2d input = new Vector2d(
                 driveSpeed * -gamepad1.left_stick_y,
                 driveSpeed * -gamepad1.left_stick_x
-        ).rotated(-poseEstimate.getHeading() + Math.toRadians(270));
+        ).rotated(-poseEstimate.getHeading() + Math.toRadians(offsetAngle));
+
 
         // Pass in the rotated input + right stick value for rotation
         // Rotation is not part of the rotated input thus must be passed in separately
@@ -230,6 +234,13 @@ public class TeleOpRed extends OpMode
         drive.update();
 
         /////////////// DRIVER CONTROL GP2 \\\\\\\\\\\\\
+        //OFF SET ANGLE
+        if (gamepad1.share) {
+            offsetAngle += 1;
+        }
+        if (gamepad1.options) {
+            offsetAngle -= 1;
+        }
         // SPEED THROTTLE
         if (gamepad2.a) {
             turnSpeed = 0.2;
@@ -467,17 +478,15 @@ public class TeleOpRed extends OpMode
         prevTime = totalTime.milliseconds();
         overallTime = totalTime.milliseconds() - prevTime;
 
-        if (overallTime > 500) {
-            telemetry.addData("Deposit Layer", autoLayer);
-            telemetry.addData("Intake Position", intakePos);
-            telemetry.addData("vPitchPos", vPitchPos);
-            telemetry.addData("vPosition", liftL.getCurrentPosition());
-            telemetry.addData("vTarget", vTarget);
-            telemetry.addData("driveSpeed", driveSpeed);
-            telemetry.addData("turnSpeed", turnSpeed);
-            telemetry.update();
-            prevTimeTelemetry = totalTime.milliseconds();
-        }
+        telemetry.addData("offset angle", offsetAngle);
+        telemetry.addData("Deposit Layer", autoLayer);
+        telemetry.addData("Intake Position", intakePos);
+        telemetry.addData("vPitchPos", vPitchPos);
+        telemetry.addData("vPosition", liftL.getCurrentPosition());
+        telemetry.addData("vTarget", vTarget);
+        telemetry.addData("driveSpeed", driveSpeed);
+        telemetry.addData("turnSpeed", turnSpeed);
+        telemetry.update();
 
 
     }
