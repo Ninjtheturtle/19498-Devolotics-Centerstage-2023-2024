@@ -742,156 +742,44 @@ public class BACKRed extends OpMode {
         }
         waitTrajDone();
 
-//        setServoPos(INTAKE, intakeUp);
-//        setMotorTarget(VLIFT, targetMed - 70);
-//        waitTime(500);
-//        setServoPos(VPITCH, vPitchDeposit);
-//        waitTime(500);
-//        setServoPos(PIVOT, pivotScore);
-//        setMotorTarget(VLIFT, 300);
-//
-//        // Trajectory 2
-//        switch (PROPLOCATION_N){
-//            case 0:
-//                followTraj(2);
-//                break;
-//            case 1:
-//                followTraj(12);
-//                break;
-//            case 2:
-//                followTraj(22);
-//                break;
-//        }
-//        waitTrajDone();
-//
-//        waitTime(200);
-//        setServoPos(LOCKFRONT, lockFU);
-//        setServoPos(LOCKBACK, lockBU);
-//
-//        // Trajectory 3
-//        switch (PROPLOCATION_N){
-//            case 0:
-//                followTraj(3);
-//                break;
-//            case 1:
-//                followTraj(13);
-//                break;
-//            case 2:
-//                followTraj(23);
-//                break;
-//        }
-//
-//        waitTime(1000); // adjust for when the robot is far enough away from the backdrop
-//
-//        setMotorTarget(VLIFT, 600);
-//        waitTime(200);
-//        setServoPos(LOCKFRONT, lockFD);
-//        setServoPos(LOCKBACK, lockBD);
-//        setServoPos(PIVOT, pivotHome);
-//        waitTime(400);
-//        setServoPos(VPITCH, vPitchIntake);
-//        waitTime(800);
-//        setMotorTarget(VLIFT, -10);
-//
-//        // Trajectory 4
-//        switch (PROPLOCATION_N){
-//            case 0:
-//                followTraj(4);
-//                break;
-//            case 1:
-//                followTraj(14);
-//                break;
-//            case 2:
-//                followTraj(24);
-//                break;
-//        }
-//
-//        waitTime(200);
-//        setMotorPower(1);
-//        waitTrajDone();
-//        waitTime(80);
-//        checkIntaked();
-//        setMotorPower(-1);
-//
-//        // Trajectory 5
-//        switch (PROPLOCATION_N){
-//            case 0:
-//                followTraj(5);
-//                break;
-//            case 1:
-//                followTraj(15);
-//                break;
-//            case 2:
-//                followTraj(25);
-//                break;
-//        }
-//        waitTime(600);
-//        setMotorPower(0);
-//        waitTrajDone();
-//
-//        setServoPos(INTAKE, intakeUp);
-//        setMotorTarget(VLIFT, targetMed + 100);
-//        waitTime(500);
-//        setServoPos(VPITCH, vPitchDeposit);
-//        waitTime(500);
-//        setServoPos(PIVOT, pivotScore);
-//        setMotorTarget(VLIFT, 300);
-//
-//        // Trajectory 6
-//        switch (PROPLOCATION_N){
-//            case 0:
-//                followTraj(6);
-//                break;
-//            case 1:
-//                followTraj(16);
-//                break;
-//            case 2:
-//                followTraj(26);
-//                break;
-//        }
-//        waitTrajDone();
-//
-//        waitTime(200);
-//        setServoPos(LOCKFRONT, lockFU);
-//        setServoPos(LOCKBACK, lockBU);
-//        waitTime(200);
-//
-//        // Trajectory 7
-//        switch (PROPLOCATION_N){
-//            case 0:
-//                followTraj(7);
-//                break;
-//            case 1:
-//                followTraj(17);
-//                break;
-//            case 2:
-//                followTraj(27 );
-//                break;
-//        }
-//        waitTrajDone();
-//
-//        setMotorTarget(VLIFT, 600);
-//        waitTime(200);
-//        setServoPos(LOCKFRONT, lockFD);
-//        setServoPos(LOCKBACK, lockBD);
-//        setServoPos(PIVOT, pivotHome);
-//        waitTime(400);
-//        setServoPos(VPITCH, vPitchIntake);
-//        waitTime(800);
-//        setMotorTarget(VLIFT, -10);
-//
-//        // Trajectory 8
-//        switch (PROPLOCATION_N){
-//            case 0:
-//                followTraj(8);
-//                break;
-//            case 1:
-//                followTraj(18);
-//                break;
-//            case 2:
-//                followTraj(28);
-//                break;
-//        }
-//        waitTrajDone();
+        setServoPos(INTAKE, intakeUp);
+        setMotorTarget(VLIFT, targetMed - 70);
+        waitTime(500);
+        setServoPos(VPITCH, vPitchDeposit);
+        waitTime(500);
+        setServoPos(PIVOT, pivotScore);
+        setMotorTarget(VLIFT, 300);
+
+        // Trajectory 2
+        switch (PROPLOCATION_N){
+            case 0:
+                followTraj(2);
+                break;
+            case 1:
+                followTraj(12);
+                break;
+            case 2:
+                followTraj(22);
+                break;
+        }
+        waitTrajDone();
+
+        waitTime(200);
+        setServoPos(LOCKFRONT, lockFU);
+        setServoPos(LOCKBACK, lockBU);
+
+        // Trajectory 8
+        switch (PROPLOCATION_N){
+            case 0:
+                followTraj(8);
+                break;
+            case 1:
+                followTraj(18);
+                break;
+            case 2:
+                followTraj(28);
+                break;
+        }
+        waitTrajDone();
     }
 }

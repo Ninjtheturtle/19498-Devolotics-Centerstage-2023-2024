@@ -376,8 +376,8 @@ public class WINGBlue_3 extends OpMode {
                 .lineToConstantHeading(new Vector2d(-50, middleTruss1))
                 .splineToConstantHeading(new Vector2d(-38, middleTruss1), Math.toRadians(0))
                 .lineToConstantHeading(new Vector2d(20, middleTruss1))
-                .splineToConstantHeading(new Vector2d(midX(20, 50), midY(middleTruss1, 35)), lineDirection(20, middleTruss1,50,35))
-                .lineToConstantHeading(new Vector2d(50, 35))
+                .splineToConstantHeading(new Vector2d(midX(20, 50), midY(middleTruss1, 34.5)), lineDirection(20, middleTruss1,50,34.5))
+                .lineToConstantHeading(new Vector2d(50, 34.5))
                 .build(); // backdrop
 
         traj_middle4 = drive.trajectoryBuilder(traj_middle3.end())
@@ -419,8 +419,8 @@ public class WINGBlue_3 extends OpMode {
                 .lineToConstantHeading(new Vector2d(-50, rightTruss1))
                 .splineToConstantHeading(new Vector2d(-38, rightTruss1), Math.toRadians(0))
                 .lineToConstantHeading(new Vector2d(20, rightTruss1))
-                .splineToConstantHeading(new Vector2d(midX(20, 50.5), midY(rightTruss1, 30.5)), lineDirection(20, rightTruss1,50.5,30.5))
-                .lineToConstantHeading(new Vector2d(50.5, 30.5))
+                .splineToConstantHeading(new Vector2d(midX(20, 50.5), midY(rightTruss1, 30)), lineDirection(20, rightTruss1,50.5,30))
+                .lineToConstantHeading(new Vector2d(50.5, 30))
                 .build(); // backdrop
 
         traj_right4 = drive.trajectoryBuilder(traj_right3.end())
@@ -781,7 +781,7 @@ public class WINGBlue_3 extends OpMode {
         setServoPos(LOCKFRONT, lockFD);
         setServoPos(LOCKBACK, lockBD);
         setMotorTarget(VLIFT, 0);
-        waitTime(500);
+        waitTime(1500);
 
         switch (PROPLOCATION_N) {
             case 0:
@@ -807,7 +807,7 @@ public class WINGBlue_3 extends OpMode {
                 setServoPos(VPITCH, vPitchDeposit); //deposit out
                 waitTime(TurnQTime);
                 setServoPos(PIVOT, pivotScore); //Q turn
-                setMotorTarget(VLIFT, 300); //deposit down
+                setMotorTarget(VLIFT, 410); //deposit down
                 /*wait*/ waitTrajDone();
                 setServoPos(LOCKFRONT, lockFU);
                 setServoPos(LOCKBACK, lockBU);
@@ -882,7 +882,7 @@ public class WINGBlue_3 extends OpMode {
                 setServoPos(VPITCH, vPitchDeposit); //deposit out
                 waitTime(TurnQTime);
                 setServoPos(PIVOT, pivotScore); //Q turn
-                setMotorTarget(VLIFT, 300); //deposit down
+                setMotorTarget(VLIFT, 410); //deposit down
                 /*wait*/ waitTrajDone();
                 setServoPos(LOCKFRONT, lockFU);
                 setServoPos(LOCKBACK, lockBU);
@@ -956,7 +956,7 @@ public class WINGBlue_3 extends OpMode {
                 setServoPos(VPITCH, vPitchDeposit); //deposit out
                 waitTime(TurnQTime);
                 setServoPos(PIVOT, pivotScore); //Q turn
-                setMotorTarget(VLIFT, 300); //deposit down
+                setMotorTarget(VLIFT, 410); //deposit down
                 /*wait*/ waitTrajDone();
                 setServoPos(LOCKFRONT, lockFU);
                 setServoPos(LOCKBACK, lockBU);

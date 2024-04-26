@@ -354,7 +354,7 @@ public class WINGRed_1 extends OpMode {
 
         traj_right6 = drive.trajectoryBuilder(traj_right3.end())
                 //.splineToConstantHeading(new Vector2d(56, 64), Math.toRadians(330))
-                .lineToConstantHeading(new Vector2d(42, -64))
+                .lineToConstantHeading(new Vector2d(42, -16))
                 .build(); //park
 
         // Prop in the middle
@@ -364,7 +364,7 @@ public class WINGRed_1 extends OpMode {
 
         traj_middle1 = drive.trajectoryBuilder(START_POSE)
                 .lineToLinearHeading(new Pose2d(-40, -38, Math.toRadians(-270)))
-                .splineToConstantHeading(new Vector2d(-36, -44), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(-36, -46), Math.toRadians(180))
                 .build(); // ppp
 
         traj_middle2 = drive.trajectoryBuilder(traj_middle1.end())
@@ -397,7 +397,7 @@ public class WINGRed_1 extends OpMode {
 
         traj_middle6 = drive.trajectoryBuilder(traj_middle3.end())
                 //.splineToConstantHeading(new Vector2d(56, 64), Math.toRadians(330))
-                .lineToConstantHeading(new Vector2d(42, -64))
+                .lineToConstantHeading(new Vector2d(42, -16))
                 .build(); //park
 
         // Prop on the left
@@ -406,11 +406,11 @@ public class WINGRed_1 extends OpMode {
 //        double leftTruss3 = -62;
 
         traj_left1 = drive.trajectoryBuilder(START_POSE)
-                .lineToLinearHeading(new Pose2d(-38, -26, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(-37, -26, Math.toRadians(180)))
                 .build(); // spike mark
 
         traj_left2 = drive.trajectoryBuilder(traj_left1.end())
-                .lineToConstantHeading(new Vector2d(-40, -38))
+                .lineToConstantHeading(new Vector2d(-39, -42))
                 .splineToLinearHeading(new Pose2d(-60, -37, Math.toRadians(180)), Math.toRadians(180))
                 .build(); // stack+1
 
@@ -418,8 +418,8 @@ public class WINGRed_1 extends OpMode {
                 .lineToConstantHeading(new Vector2d(-50, leftTruss1))
                 .splineToConstantHeading(new Vector2d(-38, leftTruss1), Math.toRadians(0))
                 .lineToConstantHeading(new Vector2d(20, leftTruss1))
-                .splineToConstantHeading(new Vector2d(midX(20, 49.5), midY(leftTruss1, -33)), lineDirection(20, leftTruss1,49.5,-33))
-                .lineToConstantHeading(new Vector2d(49.5, -33))
+                .splineToConstantHeading(new Vector2d(midX(20, 49), midY(leftTruss1, -33)), lineDirection(20, leftTruss1,49,-33))
+                .lineToConstantHeading(new Vector2d(49, -33))
                 .build(); // backdrop
 
 //        traj_left4 = drive.trajectoryBuilder(traj_left3.end())
@@ -440,7 +440,7 @@ public class WINGRed_1 extends OpMode {
 
         traj_left6 = drive.trajectoryBuilder(traj_left3.end())
                 //.splineToConstantHeading(new Vector2d(56, 64), Math.toRadians(330))
-                .lineToConstantHeading(new Vector2d(42, -64))
+                .lineToConstantHeading(new Vector2d(42, -16))
                 .build(); //park
 
         // Build Autonomous Program
@@ -780,16 +780,13 @@ public class WINGRed_1 extends OpMode {
         setServoPos(LOCKFRONT, lockFD);
         setServoPos(LOCKBACK, lockBD);
         setMotorTarget(VLIFT, 0);
-        waitTime(500);
+        waitTime(300);
 
         switch (PROPLOCATION_N) {
             case 0:
                 followTraj(1); //ppp
                 /*wait*/ waitTrajDone();
                 setServoPos(INTAKE, intakeUp);
-
-                //WAIT FOR ALLIANCE
-                waitTime(8000);
 
                 followTraj(2); //stack+1
                 /*wait*/ waitTime(150);
@@ -835,9 +832,6 @@ public class WINGRed_1 extends OpMode {
                 setServoPos(INTAKE, intakeUp);
                 waitTrajDone();
 
-                //WAIT FOR ALLIANCE
-                waitTime(8000);
-
                 followTraj(12); //stack+1
                 /*wait*/ waitTime(600);
                 setMotorPower(1);
@@ -880,9 +874,6 @@ public class WINGRed_1 extends OpMode {
                 followTraj(21); //ppp
                 /*wait*/ waitTrajDone();
                 setServoPos(INTAKE, intakeUp);
-
-                //WAIT FOR ALLIANCE
-                waitTime(8000);
 
                 followTraj(22); //stack+1
                 /*wait*/ waitTime(150);
